@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircle, Circle, TrendingUp, Users, FileText, Lightbulb, Link2, AlertTriangle, Calendar, PenTool, Plus, Trash2, MessageSquare, ExternalLink, Globe, RefreshCw, ArrowUpRight } from "lucide-react";
+import { CheckCircle, TrendingUp, Users, FileText, Lightbulb, Link2, AlertTriangle, Calendar, Plus, MessageSquare, ExternalLink, RefreshCw, ArrowUpRight } from "lucide-react";
 
 const B = {
   amber: "#faa840", amberDim: "rgba(250,168,64,0.15)", amberGlow: "rgba(250,168,64,0.25)",
@@ -38,35 +38,6 @@ function getMotivation() {
   return lines[new Date().getDate() % lines.length];
 }
 
-const SEED_NOTES = {
-  "Client To-Dos": [
-    { id: 1, text: "Send LNS updated dashboard mockups to Andrew", client: "LNS", priority: "high", done: false, created: "2026-03-27T14:30:00" },
-    { id: 2, text: "Follow up with Patrick on CJP newsletter schedule", client: "CJP", priority: "medium", done: false, created: "2026-03-27T10:15:00" },
-    { id: 3, text: "Review CK Sales Summit segmentation updates with Brad", client: "CK", priority: "medium", done: false, created: "2026-03-26T16:00:00" },
-  ],
-  "High Priority": [
-    { id: 4, text: "Finalize Aplora JV deliverable timeline with Paul and Eric", priority: "critical", done: false, created: "2026-03-28T08:00:00" },
-    { id: 5, text: "Prep pipeline deck for new business meeting Monday", priority: "critical", done: false, created: "2026-03-27T09:00:00" },
-  ],
-  "Prospect Updates": [
-    { id: 6, text: "Initial call with mid-market fintech prospect went well. Sending proposal Monday.", done: false, created: "2026-03-27T15:00:00", value: "$5K/mo" },
-    { id: 7, text: "Marketing services company interested in FDE model. Needs follow-up.", done: false, created: "2026-03-26T11:30:00", value: "$8K/mo" },
-  ],
-  "Client Meeting Notes": [
-    { id: 8, text: "LNS sync (3/27): Ben flagged data integration timeline. Brandon wants weekly status updates. Andrew aligned on Q2 roadmap.", client: "LNS", done: false, created: "2026-03-27T13:00:00" },
-    { id: 9, text: "CK check-in (3/26): Kevin pushing for faster segmentation rollout. Brad supportive. Need to scope Phase 2.", client: "CK", done: false, created: "2026-03-26T14:00:00" },
-  ],
-  "Random Thoughts": [
-    { id: 10, text: "Could we build a self-serve AI readiness assessment as a lead gen tool?", done: false, created: "2026-03-27T20:00:00" },
-    { id: 11, text: "FDE model needs a one-pager that explains it in 60 seconds", done: false, created: "2026-03-26T18:30:00" },
-  ],
-  "Links to Review": [
-    { id: 12, text: "Interesting thread on agentic AI in enterprise", url: "https://example.com/agentic-ai", domain: "example.com", done: false, created: "2026-03-27T21:00:00" },
-    { id: 13, text: "Competitor doing embedded analytics for mid-market", url: "https://example.com/competitor", domain: "example.com", done: false, created: "2026-03-26T12:00:00" },
-    { id: 14, text: "Good breakdown of forward-deployed engineering teams", url: "https://newsletter.pragmaticengineer.com/p/forward-deployed", domain: "newsletter.pragmaticengineer.com", done: false, created: "2026-03-25T09:00:00" },
-  ],
-};
-
 const SEED_CLIENTS = [
   { name: "Legal Notice Service", code: "LNS", contacts: ["Andrew Morys", "Ben Desnoyers", "Brandon Bressner"], status: "Active", lastActivity: "2026-03-27" },
   { name: "Community Journalism Project", code: "CJP", contacts: ["Patrick Schless", "Ray Herrara"], status: "Active", lastActivity: "2026-03-27" },
@@ -78,12 +49,6 @@ const SEED_PROSPECTS = [
   { name: "Marketing Services Firm", stage: "Discovery", value: "$8K/mo", nextStep: "Schedule FDE walkthrough", lastActivity: "2026-03-26" },
 ];
 
-const SEED_LINKEDIN = [
-  { id: 1, title: "The SaaS Activation Gap", pillar: "SaaS Activation Gap", status: "draft", snippet: "Every year, businesses spend billions on software that forces them to change how they work...", created: "2026-03-27" },
-  { id: 2, title: "What FDE Actually Means", pillar: "FDE as Category", status: "idea", snippet: "Forward-Deployed Execution isn't a methodology. It's a category.", created: "2026-03-26" },
-  { id: 3, title: "3 Questions Every CRO Should Answer", pillar: "Revenue Intelligence", status: "idea", snippet: "Three questions every CRO should be able to answer from their own CRM data today.", created: "2026-03-25" },
-];
-
 const SEED_CALENDAR = [
   { day: "Mon", date: "Mar 31", events: [{ time: "9:00 AM", title: "LNS Weekly Sync", type: "client" }, { time: "2:00 PM", title: "Pipeline Review", type: "internal" }] },
   { day: "Tue", date: "Apr 1", events: [{ time: "10:00 AM", title: "CJP Content Planning", type: "client" }, { time: "3:00 PM", title: "Aplora JV Strategy", type: "partner" }] },
@@ -92,33 +57,18 @@ const SEED_CALENDAR = [
   { day: "Fri", date: "Apr 4", events: [{ time: "9:00 AM", title: "Week Wrap", type: "internal" }] },
 ];
 
-const CATS = [
-  { name: "Client To-Dos", icon: CheckCircle, color: B.amber },
-  { name: "High Priority", icon: AlertTriangle, color: B.red },
-  { name: "Prospect Updates", icon: TrendingUp, color: B.green },
-  { name: "Client Meeting Notes", icon: FileText, color: "#818cf8" },
-  { name: "Random Thoughts", icon: Lightbulb, color: "#f472b6" },
-  { name: "Links to Review", icon: Link2, color: "#38bdf8" },
+const QUICK_ACTIONS = [
+  { label: "Client To-Dos", icon: CheckCircle, color: B.amber, count: 3 },
+  { label: "High Priority", icon: AlertTriangle, color: B.red, count: 2 },
+  { label: "Prospect Updates", icon: TrendingUp, color: B.green, count: 2 },
+  { label: "Meeting Notes", icon: FileText, color: "#818cf8", count: 2 },
+  { label: "Ideas", icon: Lightbulb, color: "#f472b6", count: 2 },
+  { label: "Links to Review", icon: Link2, color: "#38bdf8", count: 3 },
 ];
 
 const EV_COL = { client: B.amber, internal: B.textSec, partner: "#818cf8", prospect: B.green, focus: "#f472b6" };
 
-function timeAgo(d) {
-  const hrs = Math.round((Date.now() - new Date(d).getTime()) / 3600000);
-  if (hrs < 1) return "just now";
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.round(hrs / 24);
-  return days === 1 ? "yesterday" : `${days}d ago`;
-}
 function fmtDate(d) { return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
-function extractUrl(text) {
-  const m = text.match(/(https?:\/\/[^\s<>]+)/gi);
-  if (!m) return { url: null, domain: null, clean: text.trim() };
-  const url = m[0];
-  let domain = ""; try { domain = new URL(url).hostname.replace(/^www\./, ""); } catch { domain = url; }
-  const clean = text.replace(url, "").trim();
-  return { url, domain, clean: clean || domain };
-}
 
 const glass = {
   background: B.bgCard, borderRadius: 18, border: `1px solid ${B.border}`,
@@ -178,32 +128,6 @@ function HeroHeader() {
   );
 }
 
-function StatsBar({ notes }) {
-  const total = Object.values(notes).flat().filter(n => !n.done).length;
-  const critical = (notes["High Priority"] || []).filter(n => !n.done).length;
-  const links = (notes["Links to Review"] || []).filter(n => !n.done).length;
-  const stats = [
-    { label: "Open Items", value: total, color: B.amber },
-    { label: "Critical", value: critical, color: B.red },
-    { label: "Active Clients", value: SEED_CLIENTS.length, color: B.green },
-    { label: "Pipeline", value: SEED_PROSPECTS.length, color: "#818cf8" },
-    { label: "Links Queued", value: links, color: "#38bdf8" },
-    { label: "Posts Queued", value: SEED_LINKEDIN.length, color: "#f472b6" },
-  ];
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 14, ...anim(1) }}>
-      {stats.map((s, i) => (
-        <div key={i} style={{ ...glass, padding: "22px 20px", textAlign: "center", transition: "all 0.25s ease", cursor: "default" }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.color + "40"; e.currentTarget.style.background = B.bgCardHover; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.background = B.bgCard; }}>
-          <div style={{ fontSize: 34, fontWeight: 800, color: s.color, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{s.value}</div>
-          <div style={{ fontSize: 12, color: B.textMute, marginTop: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>{s.label}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function TopBar() {
   const [view, setView] = useState("clients");
   const tab = (active, col) => ({
@@ -212,7 +136,7 @@ function TopBar() {
     borderBottom: active ? `2px solid ${col}` : "2px solid transparent", transition: "all 0.2s ease",
   });
   return (
-    <div style={{ ...glass, ...anim(2) }}>
+    <div style={{ ...glass, ...anim(1) }}>
       <div style={{ display: "flex", padding: "0 24px", borderBottom: `1px solid ${B.border}` }}>
         <button onClick={() => setView("clients")} style={tab(view === "clients", B.amber)}>
           <Users size={18} /> Active Clients
@@ -273,131 +197,129 @@ function TopBar() {
   );
 }
 
-function NotesPanel({ notes, setNotes }) {
-  const [tab, setTab] = useState("Client To-Dos");
-  const [input, setInput] = useState("");
-  const toggle = (id) => setNotes(p => ({ ...p, [tab]: p[tab].map(n => n.id === id ? { ...n, done: !n.done } : n) }));
-  const del = (id) => setNotes(p => ({ ...p, [tab]: p[tab].filter(n => n.id !== id) }));
-  const add = () => {
-    if (!input.trim()) return;
-    const maxId = Object.values(notes).flat().reduce((mx, n) => Math.max(mx, n.id), 0);
-    let obj = { id: maxId + 1, text: input, done: false, created: new Date().toISOString() };
-    const { url, domain, clean } = extractUrl(input);
-    if (url) { obj.url = url; obj.domain = domain; obj.text = clean; if (tab !== "Links to Review" && clean === domain) { setNotes(p => ({ ...p, "Links to Review": [obj, ...p["Links to Review"]] })); setInput(""); return; } }
-    setNotes(p => ({ ...p, [tab]: [obj, ...p[tab]] }));
-    setInput("");
-  };
-  const cat = CATS.find(c => c.name === tab);
-  const items = notes[tab] || [];
-
+function QuickActions() {
   return (
-    <div style={{ ...glass, ...anim(3) }}>
-      <div style={{ padding: "18px 24px 0", borderBottom: `1px solid ${B.border}` }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>Notes & Tasks</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, background: B.greenDim, padding: "5px 14px", borderRadius: 20 }}>
-            <MessageSquare size={13} color={B.green} />
-            <span style={{ fontSize: 12, color: B.green, fontWeight: 600 }}>Slack-synced</span>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 0, overflowX: "auto" }}>
-          {CATS.map(c => {
-            const Icon = c.icon; const active = tab === c.name;
-            const count = (notes[c.name] || []).filter(n => !n.done).length;
-            return (
-              <button key={c.name} onClick={() => setTab(c.name)} style={{
-                display: "flex", alignItems: "center", gap: 6, padding: "10px 14px", border: "none", background: "none",
-                cursor: "pointer", borderBottom: active ? `2px solid ${c.color}` : "2px solid transparent",
-                color: active ? c.color : B.textMute, fontWeight: active ? 600 : 450, fontSize: 14, whiteSpace: "nowrap", transition: "all 0.2s ease",
-              }}>
-                <Icon size={15} />{c.name}
-                {count > 0 && <span style={{ fontSize: 11, fontWeight: 700, background: active ? c.color : "rgba(255,255,255,0.08)", color: active ? "#000" : B.textMute, padding: "2px 8px", borderRadius: 8 }}>{count}</span>}
-              </button>
-            );
-          })}
+    <div style={{ ...glass, padding: 24, ...anim(2) }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>Quick Actions</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, background: B.greenDim, padding: "5px 14px", borderRadius: 20 }}>
+          <MessageSquare size={13} color={B.green} />
+          <span style={{ fontSize: 12, color: B.green, fontWeight: 600 }}>Slack-synced</span>
         </div>
       </div>
-      <div style={{ padding: 24 }}>
-        <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && add()}
-            placeholder={tab === "Links to Review" ? "Paste a URL or add a note..." : `Add to ${tab}...`}
-            style={{ flex: 1, padding: "14px 18px", background: B.bgInput, border: `1px solid ${B.border}`, borderRadius: 10, fontSize: 15, color: B.text, outline: "none", transition: "border-color 0.2s ease" }}
-            onFocus={e => e.target.style.borderColor = cat.color + "60"} onBlur={e => e.target.style.borderColor = B.border} />
-          <button onClick={add} style={{ display: "flex", alignItems: "center", gap: 6, padding: "14px 22px", background: cat.color, color: "#000", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: 700, fontSize: 15, transition: "opacity 0.2s" }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.85"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-            <Plus size={18} /> Add
-          </button>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 440, overflowY: "auto" }}>
-          {items.length === 0 && <div style={{ padding: 32, textAlign: "center", color: B.textMute, fontSize: 15 }}>No items yet. Drop a note in Slack or add one here.</div>}
-          {items.map(item => (
-            <div key={item.id} style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "14px 16px", background: item.done ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.02)", borderRadius: 10, border: `1px solid ${item.done ? "transparent" : B.border}`, opacity: item.done ? 0.35 : 1, transition: "all 0.2s ease" }}>
-              <button onClick={() => toggle(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, marginTop: 2 }}>
-                {item.done ? <CheckCircle size={20} color={cat.color} /> : <Circle size={20} color="rgba(255,255,255,0.15)" />}
-              </button>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {item.url ? (
-                  <>
-                    <div style={{ fontSize: 15, color: item.done ? B.textMute : B.text, textDecoration: item.done ? "line-through" : "none", lineHeight: 1.6 }}>{item.text}</div>
-                    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{
-                      display: "inline-flex", alignItems: "center", gap: 7, marginTop: 8,
-                      padding: "6px 12px", background: "rgba(56,189,248,0.08)", borderRadius: 7,
-                      fontSize: 13, color: "#38bdf8", textDecoration: "none", border: "1px solid rgba(56,189,248,0.15)",
-                      transition: "all 0.2s ease", maxWidth: "100%", overflow: "hidden",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = B.amberDim; e.currentTarget.style.borderColor = B.amber + "30"; e.currentTarget.style.color = B.amber; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(56,189,248,0.08)"; e.currentTarget.style.borderColor = "rgba(56,189,248,0.15)"; e.currentTarget.style.color = "#38bdf8"; }}>
-                      <Globe size={14} /><span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.domain || item.url}</span><ExternalLink size={12} style={{ opacity: 0.5, flexShrink: 0 }} />
-                    </a>
-                  </>
-                ) : (
-                  <div style={{ fontSize: 15, color: item.done ? B.textMute : B.text, textDecoration: item.done ? "line-through" : "none", lineHeight: 1.6 }}>{item.text}</div>
-                )}
-                <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
-                  {item.client && <span style={{ fontSize: 11, background: B.amberDim, color: B.amber, padding: "3px 8px", borderRadius: 5, fontWeight: 600 }}>{item.client}</span>}
-                  {item.priority === "critical" && <span style={{ fontSize: 11, background: B.redDim, color: B.red, padding: "3px 8px", borderRadius: 5, fontWeight: 600 }}>CRITICAL</span>}
-                  {item.value && <span style={{ fontSize: 11, background: B.greenDim, color: B.green, padding: "3px 8px", borderRadius: 5, fontWeight: 600 }}>{item.value}</span>}
-                  <span style={{ fontSize: 11, color: B.textMute }}>{timeAgo(item.created)}</span>
-                </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+        {QUICK_ACTIONS.map(a => {
+          const Icon = a.icon;
+          return (
+            <button key={a.label} style={{
+              display: "flex", alignItems: "center", gap: 12, padding: "16px 18px",
+              background: "rgba(255,255,255,0.02)", borderRadius: 12,
+              border: `1px solid ${B.border}`, cursor: "pointer", transition: "all 0.2s ease",
+              textAlign: "left", position: "relative", overflow: "hidden",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = a.color + "40"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = `0 4px 16px ${a.color}10`; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: a.color + "15", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Icon size={18} color={a.color} />
               </div>
-              <button onClick={() => del(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4, color: "rgba(255,255,255,0.1)", transition: "color 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.color = B.red} onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.1)"}>
-                <Trash2 size={16} />
-              </button>
-            </div>
-          ))}
-        </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: B.text }}>{a.label}</div>
+                <div style={{ fontSize: 12, color: B.textMute }}>{a.count} items</div>
+              </div>
+              <ArrowUpRight size={14} color={B.textMute} style={{ flexShrink: 0 }} />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function LinkedInQueue() {
-  const sc = { draft: { bg: B.amberDim, text: B.amber }, idea: { bg: "rgba(244,114,182,0.1)", text: "#f472b6" }, scheduled: { bg: B.greenDim, text: B.green }, posted: { bg: "rgba(255,255,255,0.05)", text: B.textMute } };
+const REL_STYLE = { high: { bg: B.amberDim, text: B.amber }, medium: { bg: "rgba(56,189,248,0.1)", text: "#38bdf8" }, low: { bg: "rgba(255,255,255,0.05)", text: B.textMute } };
+const SRC_COLORS = {
+  "MIT Tech Review": "#ef4444", "The Verge AI": "#a855f7", "VentureBeat AI": "#22c55e",
+  "TechCrunch AI": "#10b981", "Ars Technica AI": "#f97316",
+};
+
+function AINewsFeed({ syncTrigger }) {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const doFetch = async (force = false) => {
+    try {
+      const opts = force ? { method: "POST" } : {};
+      const resp = await fetch("/api/ai-news", opts);
+      const data = await resp.json();
+      if (data.error) setError(data.error);
+      else { setArticles(data.articles || []); setError(null); }
+    } catch (e) { setError(e.message); }
+  };
+
+  useEffect(() => { doFetch().finally(() => setLoading(false)); }, []);
+  useEffect(() => { if (syncTrigger > 0) { setRefreshing(true); doFetch(true).finally(() => setRefreshing(false)); } }, [syncTrigger]);
+
+  const handleRefresh = async () => { setRefreshing(true); await doFetch(true); setRefreshing(false); };
+
   return (
     <div style={{ ...glass, padding: 24, ...anim(4) }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>LinkedIn Queue</h2>
-        <button style={{ display: "flex", alignItems: "center", gap: 7, padding: "8px 16px", background: B.amber, color: "#000", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 700, transition: "opacity 0.2s" }}
-          onMouseEnter={e => e.currentTarget.style.opacity = "0.85"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-          <PenTool size={14} /> New Post
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>Top AI News</h2>
+        <button onClick={handleRefresh} disabled={refreshing} style={{
+          display: "flex", alignItems: "center", gap: 7, padding: "8px 16px",
+          background: "rgba(250,168,64,0.1)", border: `1px solid rgba(250,168,64,0.18)`,
+          borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 700, color: B.amber,
+          transition: "all 0.2s ease", opacity: refreshing ? 0.6 : 1,
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = B.amberDim}
+        onMouseLeave={e => e.currentTarget.style.background = "rgba(250,168,64,0.1)"}>
+          <RefreshCw size={14} style={refreshing ? { animation: "spin 1s linear infinite" } : {}} /> Refresh
         </button>
       </div>
-      {SEED_LINKEDIN.map(p => {
-        const s = sc[p.status] || sc.idea;
+
+      {loading && articles.length === 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {[1,2,3,4,5].map(i => (
+            <div key={i} style={{ padding: "16px 18px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: `1px solid ${B.border}` }}>
+              <div style={{ height: 14, width: "60%", background: "rgba(255,255,255,0.05)", borderRadius: 4, marginBottom: 8, animation: "pulse 1.5s ease infinite" }} />
+              <div style={{ height: 12, width: "90%", background: "rgba(255,255,255,0.03)", borderRadius: 4, animation: "pulse 1.5s ease infinite" }} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", background: B.redDim, borderRadius: 10, border: `1px solid ${B.red}20`, marginBottom: 10 }}>
+          <AlertTriangle size={16} color={B.red} />
+          <span style={{ fontSize: 13, color: B.red }}>{error}</span>
+        </div>
+      )}
+
+      {!loading && !error && articles.length === 0 && (
+        <div style={{ padding: 32, textAlign: "center", color: B.textMute, fontSize: 15 }}>No AI news available. Click Refresh to fetch.</div>
+      )}
+
+      {articles.map((a, i) => {
+        const rel = REL_STYLE[a.relevance] || REL_STYLE.medium;
+        const srcColor = SRC_COLORS[a.source] || "#94a3b8";
         return (
-          <div key={p.id} style={{ padding: "16px 18px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: `1px solid ${B.border}`, marginBottom: 10, cursor: "pointer", transition: "all 0.2s ease" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = B.amber + "30"} onMouseLeave={e => e.currentTarget.style.borderColor = B.border}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-              <span style={{ fontSize: 16, fontWeight: 600, color: B.text }}>{p.title}</span>
-              <span style={{ fontSize: 11, fontWeight: 700, background: s.bg, color: s.text, padding: "3px 10px", borderRadius: 5, textTransform: "uppercase", letterSpacing: "0.06em" }}>{p.status}</span>
+          <a key={`${a.url}-${i}`} href={a.url} target="_blank" rel="noopener noreferrer" style={{
+            display: "block", padding: "16px 18px", background: "rgba(255,255,255,0.02)", borderRadius: 12,
+            border: `1px solid ${B.border}`, marginBottom: 10, cursor: "pointer", transition: "all 0.2s ease", textDecoration: "none",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber + "30"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}>
+            <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 11, fontWeight: 700, background: srcColor + "18", color: srcColor, padding: "3px 10px", borderRadius: 5 }}>{a.source}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, background: rel.bg, color: rel.text, padding: "3px 10px", borderRadius: 5, textTransform: "uppercase", letterSpacing: "0.06em" }}>{a.relevance}</span>
             </div>
-            <div style={{ fontSize: 14, color: B.textSec, lineHeight: 1.7 }}>{p.snippet}</div>
-            <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-              <span style={{ fontSize: 11, background: "rgba(255,255,255,0.05)", color: B.textSec, padding: "3px 10px", borderRadius: 5, fontWeight: 500 }}>{p.pillar}</span>
-              <span style={{ fontSize: 11, color: B.textMute }}>{fmtDate(p.created)}</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+              <span style={{ fontSize: 15, fontWeight: 600, color: B.text, lineHeight: 1.5 }}>{a.title}</span>
+              <ExternalLink size={14} color={B.textMute} style={{ flexShrink: 0, marginTop: 3 }} />
             </div>
-          </div>
+            {a.summary && <div style={{ fontSize: 13, color: B.textSec, lineHeight: 1.6, marginTop: 6 }}>{a.summary}</div>}
+          </a>
         );
       })}
     </div>
@@ -435,11 +357,11 @@ function WeeklyCalendar() {
   );
 }
 
-function SlackSync() {
+function SlackSync({ onSyncNow }) {
   const pulls = [{ time: "7:00 AM", status: "completed" }, { time: "12:00 PM", status: "upcoming" }, { time: "6:00 PM", status: "upcoming" }];
   return (
     <div style={{ ...glass, padding: 24, display: "flex", flexDirection: "column", ...anim(3) }}>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0, marginBottom: 6 }}>Slack Sync</h2>
+      <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0, marginBottom: 6 }}>Slack + News Sync</h2>
       <div style={{ fontSize: 13, color: B.textMute, marginBottom: 20 }}>#cowork-daily-organizer</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
         {pulls.map((p, i) => (
@@ -450,7 +372,7 @@ function SlackSync() {
           </div>
         ))}
       </div>
-      <button style={{
+      <button onClick={onSyncNow} style={{
         marginTop: 20, width: "100%", padding: "12px 16px", background: "rgba(250,168,64,0.1)",
         border: `1px solid rgba(250,168,64,0.18)`, borderRadius: 10, cursor: "pointer", fontSize: 14,
         color: B.amber, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s ease",
@@ -463,19 +385,19 @@ function SlackSync() {
 }
 
 export default function CommandCenter() {
-  const [notes, setNotes] = useState(SEED_NOTES);
+  const [newsSyncTrigger, setNewsSyncTrigger] = useState(0);
   return (
     <div style={{ minHeight: "100vh", background: B.bg }}>
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }`}</style>
       <HeroHeader />
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "28px 48px 48px" }}>
-        <StatsBar notes={notes} />
-        <div style={{ marginTop: 20 }}><TopBar /></div>
+        <div style={{ marginTop: 0 }}><TopBar /></div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, marginTop: 20 }}>
-          <NotesPanel notes={notes} setNotes={setNotes} />
-          <SlackSync />
+          <QuickActions />
+          <SlackSync onSyncNow={() => setNewsSyncTrigger(t => t + 1)} />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 }}>
-          <LinkedInQueue />
+          <AINewsFeed syncTrigger={newsSyncTrigger} />
           <WeeklyCalendar />
         </div>
         <div style={{ textAlign: "center", padding: "36px 0 12px", fontSize: 12, color: B.textMute, letterSpacing: "0.08em", textTransform: "uppercase" }}>PerformanceLabs.AI Command Center</div>
