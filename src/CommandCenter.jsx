@@ -1,7 +1,31 @@
 import { useState } from "react";
-import { CheckCircle, Circle, TrendingUp, Users, FileText, Lightbulb, Link2, AlertTriangle, Calendar, PenTool, ChevronRight, Plus, Trash2, MessageSquare } from "lucide-react";
+import { CheckCircle, Circle, TrendingUp, Users, FileText, Lightbulb, Link2, AlertTriangle, Calendar, PenTool, ChevronRight, Plus, Trash2, MessageSquare, ExternalLink, Globe, RefreshCw } from "lucide-react";
 
-// ─── Seed Data (will be replaced by Supabase) ─────────────────────────────
+// Brand Tokens
+const BRAND = {
+  navy: "#102d50",
+  navyLight: "#1a3d66",
+  navyMuted: "#2a4a72",
+  amber: "#faa840",
+  amberLight: "#fbb960",
+  amberBg: "#fef7ec",
+  red: "#ef4537",
+  redBg: "#fef2f1",
+  surface: "#ffffff",
+  bg: "#f5f7fa",
+  bgAlt: "#edf0f5",
+  text: "#102d50",
+  textSecondary: "#5a6b80",
+  textMuted: "#8d99a8",
+  border: "#e2e8f0",
+  borderLight: "#f0f3f7",
+  cardBg: "#fafbfc",
+  success: "#0d9668",
+  successBg: "#ecfdf5",
+};
+
+const LOGO_URL = "https://dl.dropboxusercontent.com/scl/fi/jyd8wyhmo29yc6l4hfmi2/Icon_1x1.png?rlkey=tx9xsnkojuzqhmk12nqxskr1h&st=4nhdbpjs";
+
 const SEED_NOTES = {
   "Client To-Dos": [
     { id: 1, text: "Send LNS updated dashboard mockups to Andrew", client: "LNS", priority: "high", done: false, created: "2026-03-27T14:30:00" },
@@ -25,20 +49,21 @@ const SEED_NOTES = {
     { id: 11, text: "FDE model needs a one-pager that explains it in 60 seconds", done: false, created: "2026-03-26T18:30:00" },
   ],
   "Links to Review": [
-    { id: 12, text: "Interesting thread on agentic AI in enterprise", url: "https://example.com/agentic-ai", done: false, created: "2026-03-27T21:00:00" },
-    { id: 13, text: "Competitor doing embedded analytics for mid-market", url: "https://example.com/competitor", done: false, created: "2026-03-26T12:00:00" },
+    { id: 12, text: "Interesting thread on agentic AI in enterprise", url: "https://example.com/agentic-ai", domain: "example.com", done: false, created: "2026-03-27T21:00:00" },
+    { id: 13, text: "Competitor doing embedded analytics for mid-market", url: "https://example.com/competitor", domain: "example.com", done: false, created: "2026-03-26T12:00:00" },
+    { id: 14, text: "Good breakdown of forward-deployed engineering teams", url: "https://newsletter.pragmaticengineer.com/p/forward-deployed", domain: "newsletter.pragmaticengineer.com", done: false, created: "2026-03-25T09:00:00" },
   ],
 };
 
 const SEED_CLIENTS = [
-  { name: "Legal Notice Service", code: "LNS", contacts: ["Andrew Morys", "Ben Desnoyers", "Brandon Bressner"], status: "Active", lastActivity: "2026-03-27", color: "#3b82f6" },
-  { name: "Community Journalism Project", code: "CJP", contacts: ["Patrick Schless", "Ray Herrara"], status: "Active", lastActivity: "2026-03-27", color: "#8b5cf6" },
-  { name: "CK Marketing", code: "CK", contacts: ["Brad Moore", "Kevin Roselli"], status: "Active", lastActivity: "2026-03-26", color: "#f59e0b" },
+  { name: "Legal Notice Service", code: "LNS", contacts: ["Andrew Morys", "Ben Desnoyers", "Brandon Bressner"], status: "Active", lastActivity: "2026-03-27", color: BRAND.amber },
+  { name: "Community Journalism Project", code: "CJP", contacts: ["Patrick Schless", "Ray Herrara"], status: "Active", lastActivity: "2026-03-27", color: BRAND.navyMuted },
+  { name: "CK Marketing", code: "CK", contacts: ["Brad Moore", "Kevin Roselli"], status: "Active", lastActivity: "2026-03-26", color: BRAND.red },
 ];
 
 const SEED_PROSPECTS = [
-  { name: "Mid-Market Fintech Co.", stage: "Proposal Sent", value: "$5K/mo", nextStep: "Follow up Monday", lastActivity: "2026-03-27", color: "#10b981" },
-  { name: "Marketing Services Firm", stage: "Discovery", value: "$8K/mo", nextStep: "Schedule FDE walkthrough", lastActivity: "2026-03-26", color: "#f59e0b" },
+  { name: "Mid-Market Fintech Co.", stage: "Proposal Sent", value: "$5K/mo", nextStep: "Follow up Monday", lastActivity: "2026-03-27", color: BRAND.success },
+  { name: "Marketing Services Firm", stage: "Discovery", value: "$8K/mo", nextStep: "Schedule FDE walkthrough", lastActivity: "2026-03-26", color: BRAND.amber },
 ];
 
 const SEED_LINKEDIN = [
@@ -56,20 +81,20 @@ const SEED_CALENDAR = [
 ];
 
 const NOTE_CATEGORIES = [
-  { name: "Client To-Dos", icon: CheckCircle, color: "#3b82f6" },
-  { name: "High Priority", icon: AlertTriangle, color: "#ef4444" },
-  { name: "Prospect Updates", icon: TrendingUp, color: "#10b981" },
-  { name: "Client Meeting Notes", icon: FileText, color: "#8b5cf6" },
-  { name: "Random Thoughts", icon: Lightbulb, color: "#f59e0b" },
-  { name: "Links to Review", icon: Link2, color: "#6366f1" },
+  { name: "Client To-Dos", icon: CheckCircle, color: BRAND.navy },
+  { name: "High Priority", icon: AlertTriangle, color: BRAND.red },
+  { name: "Prospect Updates", icon: TrendingUp, color: BRAND.success },
+  { name: "Client Meeting Notes", icon: FileText, color: BRAND.navyMuted },
+  { name: "Random Thoughts", icon: Lightbulb, color: BRAND.amber },
+  { name: "Links to Review", icon: Link2, color: BRAND.navyLight },
 ];
 
 const EVENT_COLORS = {
-  client: "#3b82f6",
-  internal: "#6b7280",
-  partner: "#8b5cf6",
-  prospect: "#10b981",
-  focus: "#f59e0b",
+  client: BRAND.navy,
+  internal: BRAND.textSecondary,
+  partner: BRAND.navyMuted,
+  prospect: BRAND.success,
+  focus: BRAND.amber,
 };
 
 function timeAgo(dateStr) {
@@ -77,42 +102,104 @@ function timeAgo(dateStr) {
   const then = new Date(dateStr);
   const hrs = Math.round((now - then) / 3600000);
   if (hrs < 1) return "just now";
-  if (hrs < 24) return hrs + "h ago";
+  if (hrs < 24) return `${hrs}h ago`;
   const days = Math.round(hrs / 24);
-  return days === 1 ? "yesterday" : days + "d ago";
+  return days === 1 ? "yesterday" : `${days}d ago`;
 }
 
 function formatDate(dateStr) {
   return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+function extractUrl(text) {
+  const urlRegex = /(https?:\/\/[^\s<>]+)/gi;
+  const match = text.match(urlRegex);
+  if (!match) return { url: null, domain: null, cleanText: text.trim() };
+  const url = match[0];
+  let domain = "";
+  try { domain = new URL(url).hostname.replace(/^www\./, ""); } catch { domain = url; }
+  const cleanText = text.replace(url, "").trim();
+  return { url, domain, cleanText: cleanText || domain };
+}
+
+function todayString() {
+  const d = new Date();
+  const opts = { weekday: "long", month: "long", day: "numeric", year: "numeric" };
+  return d.toLocaleDateString("en-US", opts);
+}
+
+const card = {
+  background: BRAND.surface,
+  borderRadius: 14,
+  border: `1px solid ${BRAND.border}`,
+  overflow: "hidden",
+};
+
+const sectionTitle = {
+  fontSize: 15,
+  fontWeight: 650,
+  color: BRAND.text,
+  margin: 0,
+  letterSpacing: "-0.01em",
+};
+
 function TopBar() {
   const [activeView, setActiveView] = useState("clients");
+
+  const tabStyle = (active, accentColor) => ({
+    display: "flex", alignItems: "center", gap: 8, padding: "13px 18px",
+    border: "none", background: "none", cursor: "pointer",
+    fontSize: 13, fontWeight: active ? 600 : 450, letterSpacing: "-0.01em",
+    color: active ? accentColor : BRAND.textMuted,
+    borderBottom: active ? `2px solid ${accentColor}` : "2px solid transparent",
+    transition: "all 0.2s ease",
+  });
+
+  const badge = (active, accentColor) => ({
+    background: active ? accentColor : BRAND.bgAlt,
+    color: active ? "white" : BRAND.textMuted,
+    fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 10,
+    transition: "all 0.2s ease",
+  });
+
   return (
-    <div style={{ background: "white", borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,0.08)", overflow: "hidden" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "0 20px", borderBottom: "1px solid #f3f4f6" }}>
-        <button onClick={() => setActiveView("clients")} style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 16px", border: "none", background: "none", cursor: "pointer", fontSize: 14, fontWeight: activeView === "clients" ? 600 : 400, color: activeView === "clients" ? "#3b82f6" : "#6b7280", borderBottom: activeView === "clients" ? "2px solid #3b82f6" : "2px solid transparent" }}>
-          <Users size={16} /> Active Clients
-          <span style={{ background: activeView === "clients" ? "#3b82f6" : "#e5e7eb", color: activeView === "clients" ? "white" : "#6b7280", fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 10 }}>3</span>
+    <div style={card}>
+      <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "0 20px", borderBottom: `1px solid ${BRAND.borderLight}` }}>
+        <button onClick={() => setActiveView("clients")} style={tabStyle(activeView === "clients", BRAND.navy)}>
+          <Users size={15} />
+          Active Clients
+          <span style={badge(activeView === "clients", BRAND.navy)}>3</span>
         </button>
-        <button onClick={() => setActiveView("prospects")} style={{ display: "flex", alignItems: "center", gap: 8, padding: "14px 16px", border: "none", background: "none", cursor: "pointer", fontSize: 14, fontWeight: activeView === "prospects" ? 600 : 400, color: activeView === "prospects" ? "#10b981" : "#6b7280", borderBottom: activeView === "prospects" ? "2px solid #10b981" : "2px solid transparent" }}>
-          <TrendingUp size={16} /> Prospects
-          <span style={{ background: activeView === "prospects" ? "#10b981" : "#e5e7eb", color: activeView === "prospects" ? "white" : "#6b7280", fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 10 }}>{SEED_PROSPECTS.length}</span>
+        <button onClick={() => setActiveView("prospects")} style={tabStyle(activeView === "prospects", BRAND.success)}>
+          <TrendingUp size={15} />
+          Prospects
+          <span style={badge(activeView === "prospects", BRAND.success)}>{SEED_PROSPECTS.length}</span>
         </button>
       </div>
+
       <div style={{ padding: 20 }}>
         {activeView === "clients" ? (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
             {SEED_CLIENTS.map((client) => (
-              <div key={client.code} style={{ padding: "16px 18px", background: "#fafafa", borderRadius: 10, borderLeft: "3px solid " + client.color, cursor: "pointer", transition: "all 0.15s" }}>
+              <div key={client.code} style={{
+                padding: "16px 18px", background: BRAND.cardBg, borderRadius: 10,
+                borderLeft: `3px solid ${client.color}`, cursor: "pointer",
+                transition: "all 0.2s ease", border: `1px solid ${BRAND.borderLight}`,
+                borderLeftWidth: 3, borderLeftColor: client.color,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(16,45,80,0.08)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+              >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "#111827" }}>{client.name}</span>
-                  <span style={{ fontSize: 11, background: "#f0fdf4", color: "#16a34a", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>{client.status}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: BRAND.text }}>{client.name}</span>
+                  <span style={{ fontSize: 10, background: BRAND.successBg, color: BRAND.success, padding: "3px 8px", borderRadius: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>{client.status}</span>
                 </div>
-                <div style={{ fontSize: 13, color: "#6b7280", marginBottom: 6 }}>{client.contacts.join(", ")}</div>
+                <div style={{ fontSize: 13, color: BRAND.textSecondary, marginBottom: 8 }}>
+                  {client.contacts.join(", ")}
+                </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 12, color: "#9ca3af" }}>Last activity: {formatDate(client.lastActivity)}</span>
-                  <ChevronRight size={14} color="#d1d5db" />
+                  <span style={{ fontSize: 12, color: BRAND.textMuted }}>Last: {formatDate(client.lastActivity)}</span>
+                  <ChevronRight size={14} color={BRAND.textMuted} />
                 </div>
               </div>
             ))}
@@ -120,22 +207,40 @@ function TopBar() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
             {SEED_PROSPECTS.map((prospect, i) => (
-              <div key={i} style={{ padding: "16px 18px", background: "#fafafa", borderRadius: 10, borderLeft: "3px solid " + prospect.color, cursor: "pointer", transition: "all 0.15s" }}>
+              <div key={i} style={{
+                padding: "16px 18px", background: BRAND.cardBg, borderRadius: 10,
+                borderLeft: `3px solid ${prospect.color}`, cursor: "pointer",
+                transition: "all 0.2s ease", border: `1px solid ${BRAND.borderLight}`,
+                borderLeftWidth: 3, borderLeftColor: prospect.color,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(16,45,80,0.08)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
+              >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "#111827" }}>{prospect.name}</span>
-                  <span style={{ fontSize: 11, background: "#eff6ff", color: "#3b82f6", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>{prospect.stage}</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: BRAND.text }}>{prospect.name}</span>
+                  <span style={{ fontSize: 10, background: BRAND.amberBg, color: BRAND.amber, padding: "3px 8px", borderRadius: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>{prospect.stage}</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, color: "#111827", fontWeight: 500 }}>{prospect.value}</span>
-                  <span style={{ fontSize: 12, color: "#6b7280" }}>potential retainer</span>
+                  <span style={{ fontSize: 14, color: BRAND.text, fontWeight: 600 }}>{prospect.value}</span>
+                  <span style={{ fontSize: 12, color: BRAND.textMuted }}>potential retainer</span>
                 </div>
-                <div style={{ fontSize: 13, color: "#6b7280", marginBottom: 4 }}><span style={{ fontWeight: 500 }}>Next:</span> {prospect.nextStep}</div>
-                <div style={{ fontSize: 12, color: "#9ca3af" }}>Last activity: {formatDate(prospect.lastActivity)}</div>
+                <div style={{ fontSize: 13, color: BRAND.textSecondary, marginBottom: 4 }}>
+                  <span style={{ fontWeight: 500 }}>Next:</span> {prospect.nextStep}
+                </div>
+                <div style={{ fontSize: 12, color: BRAND.textMuted }}>Last: {formatDate(prospect.lastActivity)}</div>
               </div>
             ))}
-            <div style={{ padding: "16px 18px", background: "#fafafa", borderRadius: 10, border: "2px dashed #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.15s" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#9ca3af" }}>
-                <Plus size={18} /><span style={{ fontSize: 14, fontWeight: 500 }}>Add Prospect</span>
+            <div style={{
+              padding: "16px 18px", background: BRAND.cardBg, borderRadius: 10, border: `2px dashed ${BRAND.border}`,
+              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = BRAND.amber; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.border; }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: BRAND.textMuted }}>
+                <Plus size={18} />
+                <span style={{ fontSize: 13, fontWeight: 500 }}>Add Prospect</span>
               </div>
             </div>
           </div>
@@ -148,54 +253,198 @@ function TopBar() {
 function NotesPanel({ notes, setNotes }) {
   const [activeTab, setActiveTab] = useState("Client To-Dos");
   const [newNote, setNewNote] = useState("");
-  const toggleDone = (id) => { setNotes((prev) => ({ ...prev, [activeTab]: prev[activeTab].map((n) => (n.id === id ? { ...n, done: !n.done } : n)) })); };
-  const deleteNote = (id) => { setNotes((prev) => ({ ...prev, [activeTab]: prev[activeTab].filter((n) => n.id !== id) })); };
-  const addNote = () => { if (!newNote.trim()) return; const maxId = Object.values(notes).flat().reduce((max, n) => Math.max(max, n.id), 0); setNotes((prev) => ({ ...prev, [activeTab]: [{ id: maxId + 1, text: newNote, done: false, created: new Date().toISOString() }, ...prev[activeTab]] })); setNewNote(""); };
+
+  const toggleDone = (id) => {
+    setNotes((prev) => ({
+      ...prev,
+      [activeTab]: prev[activeTab].map((n) => (n.id === id ? { ...n, done: !n.done } : n)),
+    }));
+  };
+
+  const deleteNote = (id) => {
+    setNotes((prev) => ({
+      ...prev,
+      [activeTab]: prev[activeTab].filter((n) => n.id !== id),
+    }));
+  };
+
+  const addNote = () => {
+    if (!newNote.trim()) return;
+    const maxId = Object.values(notes).flat().reduce((max, n) => Math.max(max, n.id), 0);
+    let noteObj = { id: maxId + 1, text: newNote, done: false, created: new Date().toISOString() };
+
+    const { url, domain, cleanText } = extractUrl(newNote);
+    if (url) {
+      noteObj.url = url;
+      noteObj.domain = domain;
+      noteObj.text = cleanText;
+      if (activeTab !== "Links to Review" && cleanText === domain) {
+        setNotes((prev) => ({
+          ...prev,
+          "Links to Review": [noteObj, ...prev["Links to Review"]],
+        }));
+        setNewNote("");
+        return;
+      }
+    }
+
+    setNotes((prev) => ({
+      ...prev,
+      [activeTab]: [noteObj, ...prev[activeTab]],
+    }));
+    setNewNote("");
+  };
+
   const activeCat = NOTE_CATEGORIES.find((c) => c.name === activeTab);
   const items = notes[activeTab] || [];
+
   return (
-    <div style={{ background: "white", borderRadius: 12, boxShadow: "0 1px 3px rgba(0,0,0,0.08)", overflow: "hidden" }}>
-      <div style={{ padding: "16px 20px 0", borderBottom: "1px solid #f3f4f6" }}>
+    <div style={card}>
+      <div style={{ padding: "16px 20px 0", borderBottom: `1px solid ${BRAND.borderLight}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 600, color: "#111827", margin: 0 }}>Notes & Tasks</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#f0fdf4", padding: "4px 10px", borderRadius: 20 }}>
-            <MessageSquare size={13} color="#16a34a" />
-            <span style={{ fontSize: 12, color: "#16a34a", fontWeight: 500 }}>Slack-synced</span>
+          <h2 style={sectionTitle}>Notes & Tasks</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, background: BRAND.successBg, padding: "4px 10px", borderRadius: 20 }}>
+            <MessageSquare size={12} color={BRAND.success} />
+            <span style={{ fontSize: 11, color: BRAND.success, fontWeight: 600 }}>Slack-synced</span>
           </div>
         </div>
         <div style={{ display: "flex", gap: 0, overflowX: "auto" }}>
-          {NOTE_CATEGORIES.map((cat) => { const Icon = cat.icon; const isActive = activeTab === cat.name; const count = (notes[cat.name] || []).filter((n) => !n.done).length; return (
-            <button key={cat.name} onClick={() => setActiveTab(cat.name)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 14px", border: "none", background: "none", cursor: "pointer", borderBottom: isActive ? "2px solid " + cat.color : "2px solid transparent", color: isActive ? cat.color : "#9ca3af", fontWeight: isActive ? 600 : 400, fontSize: 13, whiteSpace: "nowrap", transition: "all 0.15s" }}>
-              <Icon size={14} />{cat.name}
-              {count > 0 && <span style={{ background: isActive ? cat.color : "#e5e7eb", color: isActive ? "white" : "#6b7280", fontSize: 11, fontWeight: 600, padding: "1px 7px", borderRadius: 10, marginLeft: 2 }}>{count}</span>}
-            </button>
-          ); })}
+          {NOTE_CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            const isActive = activeTab === cat.name;
+            const count = (notes[cat.name] || []).filter((n) => !n.done).length;
+            return (
+              <button
+                key={cat.name}
+                onClick={() => setActiveTab(cat.name)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 5, padding: "8px 12px", border: "none",
+                  background: "none", cursor: "pointer",
+                  borderBottom: isActive ? `2px solid ${cat.color}` : "2px solid transparent",
+                  color: isActive ? cat.color : BRAND.textMuted,
+                  fontWeight: isActive ? 600 : 450, fontSize: 12, whiteSpace: "nowrap",
+                  transition: "all 0.2s ease", letterSpacing: "-0.01em",
+                }}
+              >
+                <Icon size={13} />
+                {cat.name}
+                {count > 0 && (
+                  <span style={{
+                    background: isActive ? cat.color : BRAND.bgAlt, color: isActive ? "white" : BRAND.textMuted,
+                    fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 8, marginLeft: 1,
+                  }}>{count}</span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
+
       <div style={{ padding: 20 }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          <input type="text" value={newNote} onChange={(e) => setNewNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addNote()} placeholder={"Add to " + activeTab + "..."} style={{ flex: 1, padding: "10px 14px", border: "1px solid #e5e7eb", borderRadius: 8, fontSize: 14, outline: "none", color: "#111827" }} />
-          <button onClick={addNote} style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", background: activeCat.color, color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 500, fontSize: 14 }}>
-            <Plus size={16} /> Add
+          <input
+            type="text"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addNote()}
+            placeholder={activeTab === "Links to Review" ? "Paste a URL or add a note..." : `Add to ${activeTab}...`}
+            style={{
+              flex: 1, padding: "10px 14px", border: `1px solid ${BRAND.border}`, borderRadius: 8,
+              fontSize: 13, outline: "none", color: BRAND.text, background: BRAND.cardBg,
+              transition: "border-color 0.2s ease",
+            }}
+            onFocus={(e) => e.target.style.borderColor = BRAND.navy}
+            onBlur={(e) => e.target.style.borderColor = BRAND.border}
+          />
+          <button
+            onClick={addNote}
+            style={{
+              display: "flex", alignItems: "center", gap: 6, padding: "10px 16px", background: activeCat.color,
+              color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600, fontSize: 13,
+              transition: "opacity 0.2s ease",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
+            onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+          >
+            <Plus size={15} /> Add
           </button>
         </div>
+
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {items.length === 0 && <div style={{ padding: 24, textAlign: "center", color: "#9ca3af", fontSize: 14 }}>No items yet. Drop a note in #cowork-daily-organizer on Slack or add one here.</div>}
+          {items.length === 0 && (
+            <div style={{ padding: 28, textAlign: "center", color: BRAND.textMuted, fontSize: 13 }}>
+              No items yet. Drop a note in #cowork-daily-organizer on Slack or add one here.
+            </div>
+          )}
           {items.map((item) => (
-            <div key={item.id} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 14px", background: item.done ? "#f9fafb" : "#fafafa", borderRadius: 8, border: "1px solid #f3f4f6", opacity: item.done ? 0.5 : 1, transition: "all 0.15s" }}>
+            <div
+              key={item.id}
+              style={{
+                display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 14px",
+                background: item.done ? BRAND.bg : BRAND.cardBg, borderRadius: 8, border: `1px solid ${BRAND.borderLight}`,
+                opacity: item.done ? 0.45 : 1, transition: "all 0.2s ease",
+              }}
+            >
               <button onClick={() => toggleDone(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, marginTop: 2 }}>
-                {item.done ? <CheckCircle size={18} color={activeCat.color} /> : <Circle size={18} color="#d1d5db" />}
+                {item.done ? <CheckCircle size={17} color={activeCat.color} /> : <Circle size={17} color={BRAND.border} />}
               </button>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, color: item.done ? "#9ca3af" : "#111827", textDecoration: item.done ? "line-through" : "none", lineHeight: 1.5 }}>{item.text}</div>
-                <div style={{ display: "flex", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
-                  {item.client && <span style={{ fontSize: 11, background: "#eff6ff", color: "#3b82f6", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>{item.client}</span>}
-                  {item.priority === "critical" && <span style={{ fontSize: 11, background: "#fef2f2", color: "#ef4444", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>Critical</span>}
-                  {item.value && <span style={{ fontSize: 11, background: "#f0fdf4", color: "#16a34a", padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>{item.value}</span>}
-                  <span style={{ fontSize: 11, color: "#9ca3af" }}>{timeAgo(item.created)}</span>
+                {item.url ? (
+                  <>
+                    <div style={{ fontSize: 13, color: item.done ? BRAND.textMuted : BRAND.text, textDecoration: item.done ? "line-through" : "none", lineHeight: 1.5, fontWeight: 450 }}>
+                      {item.text}
+                    </div>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "inline-flex", alignItems: "center", gap: 6, marginTop: 6,
+                        padding: "5px 10px", background: "#edf1f7", borderRadius: 6,
+                        fontSize: 12, color: BRAND.navyLight, textDecoration: "none",
+                        border: `1px solid ${BRAND.border}`, maxWidth: "100%", overflow: "hidden",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = BRAND.amberBg; e.currentTarget.style.borderColor = BRAND.amber; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = "#edf1f7"; e.currentTarget.style.borderColor = BRAND.border; }}
+                    >
+                      <Globe size={12} style={{ flexShrink: 0 }} />
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {item.domain || item.url}
+                      </span>
+                      <ExternalLink size={11} style={{ flexShrink: 0, opacity: 0.5 }} />
+                    </a>
+                  </>
+                ) : (
+                  <div style={{ fontSize: 13, color: item.done ? BRAND.textMuted : BRAND.text, textDecoration: item.done ? "line-through" : "none", lineHeight: 1.5, fontWeight: 450 }}>
+                    {item.text}
+                  </div>
+                )}
+                <div style={{ display: "flex", gap: 6, marginTop: 5, flexWrap: "wrap" }}>
+                  {item.client && (
+                    <span style={{ fontSize: 10, background: "#edf1f7", color: BRAND.navy, padding: "2px 7px", borderRadius: 4, fontWeight: 600 }}>
+                      {item.client}
+                    </span>
+                  )}
+                  {item.priority === "critical" && (
+                    <span style={{ fontSize: 10, background: BRAND.redBg, color: BRAND.red, padding: "2px 7px", borderRadius: 4, fontWeight: 600 }}>
+                      Critical
+                    </span>
+                  )}
+                  {item.value && (
+                    <span style={{ fontSize: 10, background: BRAND.successBg, color: BRAND.success, padding: "2px 7px", borderRadius: 4, fontWeight: 600 }}>
+                      {item.value}
+                    </span>
+                  )}
+                  <span style={{ fontSize: 10, color: BRAND.textMuted }}>{timeAgo(item.created)}</span>
                 </div>
               </div>
-              <button onClick={() => deleteNote(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#d1d5db" }}><Trash2 size={14} /></button>
+              <button onClick={() => deleteNote(item.id)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: BRAND.border, transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = BRAND.red}
+                onMouseLeave={(e) => e.currentTarget.style.color = BRAND.border}
+              >
+                <Trash2 size={14} />
+              </button>
             </div>
           ))}
         </div>
@@ -205,27 +454,56 @@ function NotesPanel({ notes, setNotes }) {
 }
 
 function LinkedInQueue() {
-  const statusColors = { draft: { bg: "#eff6ff", text: "#3b82f6" }, idea: { bg: "#faf5ff", text: "#8b5cf6" }, scheduled: { bg: "#f0fdf4", text: "#16a34a" }, posted: { bg: "#f9fafb", text: "#6b7280" } };
+  const statusColors = {
+    draft: { bg: "#edf1f7", text: BRAND.navy },
+    idea: { bg: BRAND.amberBg, text: BRAND.amber },
+    scheduled: { bg: BRAND.successBg, text: BRAND.success },
+    posted: { bg: BRAND.bg, text: BRAND.textMuted },
+  };
+
   return (
-    <div style={{ background: "white", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+    <div style={{ ...card, padding: 20 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, color: "#111827", margin: 0 }}>LinkedIn Content Queue</h2>
-        <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "#f3f4f6", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 13, color: "#374151", fontWeight: 500 }}><PenTool size={13} /> New Post</button>
+        <h2 style={sectionTitle}>LinkedIn Content Queue</h2>
+        <button style={{
+          display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", background: BRAND.amber,
+          border: "none", borderRadius: 7, cursor: "pointer", fontSize: 12, color: "white", fontWeight: 600,
+          transition: "opacity 0.2s ease",
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+        >
+          <PenTool size={12} /> New Post
+        </button>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        {SEED_LINKEDIN.map((post) => { const sc = statusColors[post.status]; return (
-          <div key={post.id} style={{ padding: "14px 16px", background: "#fafafa", borderRadius: 8, border: "1px solid #f3f4f6" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: "#111827" }}>{post.title}</span>
-              <span style={{ fontSize: 11, background: sc.bg, color: sc.text, padding: "2px 8px", borderRadius: 4, fontWeight: 500, textTransform: "capitalize" }}>{post.status}</span>
+        {SEED_LINKEDIN.map((post) => {
+          const sc = statusColors[post.status];
+          return (
+            <div key={post.id} style={{
+              padding: "14px 16px", background: BRAND.cardBg, borderRadius: 8,
+              border: `1px solid ${BRAND.borderLight}`, cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = BRAND.border; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = BRAND.borderLight; }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: BRAND.text }}>{post.title}</span>
+                <span style={{ fontSize: 10, background: sc.bg, color: sc.text, padding: "3px 8px", borderRadius: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                  {post.status}
+                </span>
+              </div>
+              <div style={{ fontSize: 12, color: BRAND.textSecondary, lineHeight: 1.6 }}>{post.snippet}</div>
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <span style={{ fontSize: 10, background: BRAND.bgAlt, color: BRAND.textSecondary, padding: "2px 8px", borderRadius: 4, fontWeight: 500 }}>
+                  {post.pillar}
+                </span>
+                <span style={{ fontSize: 10, color: BRAND.textMuted }}>{formatDate(post.created)}</span>
+              </div>
             </div>
-            <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.5 }}>{post.snippet}</div>
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <span style={{ fontSize: 11, background: "#f3f4f6", color: "#6b7280", padding: "2px 8px", borderRadius: 4 }}>{post.pillar}</span>
-              <span style={{ fontSize: 11, color: "#9ca3af" }}>{formatDate(post.created)}</span>
-            </div>
-          </div>
-        ); })}
+          );
+        })}
       </div>
     </div>
   );
@@ -233,23 +511,29 @@ function LinkedInQueue() {
 
 function WeeklyCalendar() {
   return (
-    <div style={{ background: "white", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+    <div style={{ ...card, padding: 20 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600, color: "#111827", margin: 0 }}>This Week</h2>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}><Calendar size={14} color="#6b7280" /><span style={{ fontSize: 13, color: "#6b7280" }}>Mar 31 - Apr 4, 2026</span></div>
+        <h2 style={sectionTitle}>This Week</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <Calendar size={13} color={BRAND.textMuted} />
+          <span style={{ fontSize: 12, color: BRAND.textMuted }}>Mar 31 - Apr 4, 2026</span>
+        </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
         {SEED_CALENDAR.map((day) => (
-          <div key={day.day} style={{ borderRadius: 8, overflow: "hidden", border: "1px solid #f3f4f6" }}>
-            <div style={{ background: "#f9fafb", padding: "8px 12px", textAlign: "center", borderBottom: "1px solid #f3f4f6" }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#374151" }}>{day.day}</div>
-              <div style={{ fontSize: 11, color: "#9ca3af" }}>{day.date}</div>
+          <div key={day.day} style={{ borderRadius: 8, overflow: "hidden", border: `1px solid ${BRAND.borderLight}` }}>
+            <div style={{ background: BRAND.bg, padding: "8px 10px", textAlign: "center", borderBottom: `1px solid ${BRAND.borderLight}` }}>
+              <div style={{ fontSize: 11, fontWeight: 650, color: BRAND.text, letterSpacing: "0.02em" }}>{day.day}</div>
+              <div style={{ fontSize: 10, color: BRAND.textMuted }}>{day.date}</div>
             </div>
-            <div style={{ padding: 8, display: "flex", flexDirection: "column", gap: 6, minHeight: 80 }}>
+            <div style={{ padding: 6, display: "flex", flexDirection: "column", gap: 4, minHeight: 80 }}>
               {day.events.map((ev, i) => (
-                <div key={i} style={{ padding: "6px 8px", borderRadius: 6, background: EVENT_COLORS[ev.type] + "10", borderLeft: "2px solid " + EVENT_COLORS[ev.type] }}>
-                  <div style={{ fontSize: 10, color: "#9ca3af", marginBottom: 2 }}>{ev.time}</div>
-                  <div style={{ fontSize: 11, color: "#374151", fontWeight: 500, lineHeight: 1.3 }}>{ev.title}</div>
+                <div key={i} style={{
+                  padding: "5px 7px", borderRadius: 5, background: `${EVENT_COLORS[ev.type]}0a`,
+                  borderLeft: `2px solid ${EVENT_COLORS[ev.type]}`,
+                }}>
+                  <div style={{ fontSize: 9, color: BRAND.textMuted, marginBottom: 1 }}>{ev.time}</div>
+                  <div style={{ fontSize: 10, color: BRAND.text, fontWeight: 500, lineHeight: 1.3 }}>{ev.title}</div>
                 </div>
               ))}
             </div>
@@ -261,49 +545,102 @@ function WeeklyCalendar() {
 }
 
 function SlackSyncStatus() {
-  const pulls = [{ time: "7:00 AM", status: "completed", label: "Morning" }, { time: "12:00 PM", status: "upcoming", label: "Midday" }, { time: "6:00 PM", status: "upcoming", label: "Evening" }];
+  const pulls = [
+    { time: "7:00 AM", status: "completed", label: "Morning" },
+    { time: "12:00 PM", status: "upcoming", label: "Midday" },
+    { time: "6:00 PM", status: "upcoming", label: "Evening" },
+  ];
+
   return (
-    <div style={{ background: "white", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, color: "#111827", margin: "0 0 12px" }}>Slack Sync</h2>
-      <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>#cowork-daily-organizer</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ ...card, padding: 20, display: "flex", flexDirection: "column" }}>
+      <h2 style={{ ...sectionTitle, marginBottom: 4 }}>Slack Sync</h2>
+      <div style={{ fontSize: 12, color: BRAND.textMuted, marginBottom: 16 }}>#cowork-daily-organizer</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
         {pulls.map((p, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: p.status === "completed" ? "#10b981" : "#e5e7eb" }} />
-            <span style={{ fontSize: 13, color: "#374151", fontWeight: 500, width: 70 }}>{p.time}</span>
-            <span style={{ fontSize: 12, color: p.status === "completed" ? "#10b981" : "#9ca3af", textTransform: "capitalize" }}>{p.status === "completed" ? "Synced" : "Upcoming"}</span>
+            <div style={{
+              width: 8, height: 8, borderRadius: "50%",
+              background: p.status === "completed" ? BRAND.success : BRAND.border,
+              boxShadow: p.status === "completed" ? `0 0 6px ${BRAND.success}40` : "none",
+            }} />
+            <span style={{ fontSize: 13, color: BRAND.text, fontWeight: 500, width: 70 }}>{p.time}</span>
+            <span style={{
+              fontSize: 11, fontWeight: 500,
+              color: p.status === "completed" ? BRAND.success : BRAND.textMuted,
+            }}>
+              {p.status === "completed" ? "Synced" : "Upcoming"}
+            </span>
           </div>
         ))}
       </div>
-      <button style={{ marginTop: 14, width: "100%", padding: "8px 12px", background: "#f3f4f6", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 13, color: "#374151", fontWeight: 500 }}>Sync Now</button>
+      <button style={{
+        marginTop: 16, width: "100%", padding: "9px 12px", background: BRAND.navy,
+        border: "none", borderRadius: 7, cursor: "pointer", fontSize: 12,
+        color: "white", fontWeight: 600, display: "flex", alignItems: "center",
+        justifyContent: "center", gap: 6, transition: "opacity 0.2s ease",
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
+      onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+      >
+        <RefreshCw size={13} /> Sync Now
+      </button>
     </div>
   );
 }
 
 export default function CommandCenter() {
   const [notes, setNotes] = useState(SEED_NOTES);
+
   return (
-    <div style={{ minHeight: "100vh", background: "#f8f9fb", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}>
-      <div style={{ background: "white", borderBottom: "1px solid #e5e7eb", padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "#111827", margin: 0 }}>Command Center</h1>
-          <div style={{ fontSize: 13, color: "#6b7280", marginTop: 2 }}>PerformanceLabs.AI</div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#f0fdf4", padding: "6px 14px", borderRadius: 20, border: "1px solid #dcfce7" }}>
-            <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981" }} />
-            <span style={{ fontSize: 13, color: "#16a34a", fontWeight: 500 }}>All systems active</span>
+    <div style={{
+      minHeight: "100vh", background: BRAND.bg,
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    }}>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet" />
+
+      <div style={{
+        background: BRAND.navy, padding: "0 32px", height: 60,
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <img
+            src={LOGO_URL}
+            alt="PerformanceLabs.AI"
+            style={{ width: 34, height: 34, borderRadius: 8, objectFit: "contain" }}
+            onError={(e) => { e.target.style.display = "none"; }}
+          />
+          <div>
+            <h1 style={{ fontSize: 17, fontWeight: 700, color: "white", margin: 0, letterSpacing: "-0.02em" }}>Command Center</h1>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 1 }}>{todayString()}</div>
           </div>
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#3b82f6", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 600, fontSize: 14 }}>TB</div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: "rgba(13,150,104,0.15)", padding: "5px 12px", borderRadius: 20,
+          }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399" }} />
+            <span style={{ fontSize: 12, color: "#34d399", fontWeight: 500 }}>All systems active</span>
+          </div>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8, background: BRAND.amber,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "white", fontWeight: 700, fontSize: 12,
+          }}>TB</div>
         </div>
       </div>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "24px 32px" }}>
-        <div style={{ marginBottom: 20 }}><TopBar /></div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20, marginBottom: 20 }}>
+
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "22px 32px" }}>
+        <div style={{ marginBottom: 18 }}>
+          <TopBar />
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 18, marginBottom: 18 }}>
           <NotesPanel notes={notes} setNotes={setNotes} />
           <SlackSyncStatus />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <LinkedInQueue />
           <WeeklyCalendar />
         </div>
