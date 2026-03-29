@@ -53,12 +53,32 @@ const SEED_CALENDAR = [
 ];
 
 const QUICK_ACTIONS = [
-  { label: "Client To-Dos", icon: CheckCircle, color: B.amber, count: 3 },
-  { label: "High Priority", icon: AlertTriangle, color: B.red, count: 2 },
-  { label: "Prospect Updates", icon: TrendingUp, color: B.green, count: 2 },
-  { label: "Meeting Notes", icon: FileText, color: "#818cf8", count: 2 },
-  { label: "Ideas", icon: Lightbulb, color: "#f472b6", count: 2 },
-  { label: "Links to Review", icon: Link2, color: "#38bdf8", count: 3 },
+  { label: "Client To-Dos", icon: CheckCircle, color: B.amber, items: [
+    { text: "Send LNS updated dashboard mockups to Andrew", tag: "LNS" },
+    { text: "Follow up with Patrick on CJP newsletter schedule", tag: "CJP" },
+    { text: "Review CK Sales Summit segmentation updates with Brad", tag: "CK" },
+  ]},
+  { label: "High Priority", icon: AlertTriangle, color: B.red, items: [
+    { text: "Finalize Aplora JV deliverable timeline with Paul and Eric", tag: "CRITICAL" },
+    { text: "Prep pipeline deck for new business meeting Monday", tag: "CRITICAL" },
+  ]},
+  { label: "Prospect Updates", icon: TrendingUp, color: B.green, items: [
+    { text: "Initial call with mid-market fintech prospect went well. Sending proposal Monday.", tag: "$5K/mo" },
+    { text: "Marketing services company interested in FDE model. Needs follow-up.", tag: "$8K/mo" },
+  ]},
+  { label: "Meeting Notes", icon: FileText, color: "#818cf8", items: [
+    { text: "LNS sync (3/27): Ben flagged data integration timeline. Brandon wants weekly status updates.", tag: "LNS" },
+    { text: "CK check-in (3/26): Kevin pushing for faster segmentation rollout. Need to scope Phase 2.", tag: "CK" },
+  ]},
+  { label: "Ideas", icon: Lightbulb, color: "#f472b6", items: [
+    { text: "Could we build a self-serve AI readiness assessment as a lead gen tool?" },
+    { text: "FDE model needs a one-pager that explains it in 60 seconds" },
+  ]},
+  { label: "Links to Review", icon: Link2, color: "#38bdf8", items: [
+    { text: "Interesting thread on agentic AI in enterprise", url: "https://example.com/agentic-ai" },
+    { text: "Competitor doing embedded analytics for mid-market", url: "https://example.com/competitor" },
+    { text: "Good breakdown of forward-deployed engineering teams", url: "https://newsletter.pragmaticengineer.com/p/forward-deployed" },
+  ]},
 ];
 
 const EV_COL = { client: B.amber, internal: B.textSec, partner: "#818cf8", prospect: B.green, focus: "#f472b6" };
@@ -161,6 +181,9 @@ function ProspectBar() {
 }
 
 function QuickActions() {
+  const [expanded, setExpanded] = useState(null);
+  const active = QUICK_ACTIONS.find(a => a.label === expanded);
+
   return (
     <div style={{ ...glass, padding: 24, ...anim(2) }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
@@ -170,30 +193,74 @@ function QuickActions() {
           <span style={{ fontSize: 12, color: B.green, fontWeight: 600 }}>Slack-synced</span>
         </div>
       </div>
+
+      {/* Button grid */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
         {QUICK_ACTIONS.map(a => {
           const Icon = a.icon;
+          const isActive = expanded === a.label;
           return (
-            <button key={a.label} style={{
+            <button key={a.label} onClick={() => setExpanded(isActive ? null : a.label)} style={{
               display: "flex", alignItems: "center", gap: 12, padding: "16px 18px",
-              background: "rgba(255,255,255,0.02)", borderRadius: 12,
-              border: `1px solid ${B.border}`, cursor: "pointer", transition: "all 0.2s ease",
+              background: isActive ? a.color + "12" : "rgba(255,255,255,0.02)", borderRadius: 12,
+              border: `1px solid ${isActive ? a.color + "50" : B.border}`, cursor: "pointer", transition: "all 0.2s ease",
               textAlign: "left", position: "relative", overflow: "hidden",
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = a.color + "40"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = `0 4px 16px ${a.color}10`; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+            onMouseEnter={e => { if (!isActive) { e.currentTarget.style.borderColor = a.color + "40"; e.currentTarget.style.transform = "translateY(-1px)"; }}}
+            onMouseLeave={e => { if (!isActive) { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}}>
               <div style={{ width: 36, height: 36, borderRadius: 10, background: a.color + "15", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <Icon size={18} color={a.color} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: B.text }}>{a.label}</div>
-                <div style={{ fontSize: 12, color: B.textMute }}>{a.count} items</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: isActive ? a.color : B.text }}>{a.label}</div>
+                <div style={{ fontSize: 12, color: B.textMute }}>{a.items.length} items</div>
               </div>
-              <ArrowUpRight size={14} color={B.textMute} style={{ flexShrink: 0 }} />
+              <ArrowUpRight size={14} color={isActive ? a.color : B.textMute} style={{ flexShrink: 0, transform: isActive ? "rotate(90deg)" : "none", transition: "transform 0.2s ease" }} />
             </button>
           );
         })}
       </div>
+
+      {/* Expanded detail panel */}
+      {active && (
+        <div style={{ marginTop: 16, borderTop: `1px solid ${B.border}`, paddingTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+          {active.items.map((item, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 16px",
+              background: "rgba(255,255,255,0.02)", borderRadius: 10, border: `1px solid ${B.border}`,
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = active.color + "30"}
+            onMouseLeave={e => e.currentTarget.style.borderColor = B.border}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: active.color, marginTop: 7, flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, color: B.text, lineHeight: 1.6 }}>{item.text}</div>
+                <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+                  {item.tag && (
+                    <span style={{
+                      fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 5,
+                      background: item.tag === "CRITICAL" ? B.redDim : active.color + "15",
+                      color: item.tag === "CRITICAL" ? B.red : active.color,
+                    }}>{item.tag}</span>
+                  )}
+                  {item.url && (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" style={{
+                      display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12,
+                      color: "#38bdf8", textDecoration: "none", padding: "3px 8px",
+                      background: "rgba(56,189,248,0.08)", borderRadius: 5, border: "1px solid rgba(56,189,248,0.15)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = B.amberDim; e.currentTarget.style.color = B.amber; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(56,189,248,0.08)"; e.currentTarget.style.color = "#38bdf8"; }}>
+                      <ExternalLink size={11} /> Open link
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
