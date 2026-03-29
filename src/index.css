@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* ── Brand Design Tokens ── */
+@theme {
+  --color-brand-amber: #faa840;
+  --color-brand-amber-dim: rgba(250, 168, 64, 0.15);
+  --color-brand-amber-glow: rgba(250, 168, 64, 0.25);
+  --color-brand-red: #ef4537;
+  --color-brand-red-dim: rgba(239, 69, 55, 0.12);
+  --color-brand-green: #34d399;
+  --color-brand-green-dim: rgba(52, 211, 153, 0.12);
+  --color-brand-purple: #a78bfa;
+  --color-brand-purple-dim: rgba(167, 139, 250, 0.12);
+  --color-brand-indigo: #818cf8;
+  --color-brand-pink: #f472b6;
+  --color-brand-sky: #38bdf8;
+  --color-brand-navy: #102d50;
+
+  --color-bg-primary: #080f1e;
+  --color-bg-card: rgba(255, 255, 255, 0.035);
+  --color-bg-card-hover: rgba(255, 255, 255, 0.06);
+  --color-bg-input: rgba(255, 255, 255, 0.05);
+  --color-bg-subtle: rgba(255, 255, 255, 0.02);
+  --color-bg-header: linear-gradient(135deg, #0c1a30 0%, #0f1b2d 40%, #131f33 100%);
+
+  --color-border-default: rgba(255, 255, 255, 0.07);
+  --color-border-hover: rgba(250, 168, 64, 0.25);
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: rgba(255, 255, 255, 0.55);
+  --color-text-muted: rgba(255, 255, 255, 0.3);
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --animate-fade-in-up: fade-in-up 0.5s ease both;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s ease infinite;
+  --animate-gradient-shift: gradient-shift 4s ease infinite;
+  --animate-pulse-skeleton: pulse-skeleton 1.5s ease-in-out infinite;
+}
+
+/* ── Keyframe Animations ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes pulse-skeleton {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ── Base Layer ── */
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg-primary);
+    color: #e2e8f0;
+  }
+  ::selection { background: rgba(250, 168, 64, 0.3); color: white; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(250, 168, 64, 0.2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(250, 168, 64, 0.4); }
+}
+
+/* ── Glass Card Utility ── */
+@utility glass {
+  background: var(--color-bg-card);
+  border-radius: 18px;
+  border: 1px solid var(--color-border-default);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+/* ── Stagger Delay Utilities ── */
+@utility stagger-1 { animation-delay: 0.08s; }
+@utility stagger-2 { animation-delay: 0.16s; }
+@utility stagger-3 { animation-delay: 0.24s; }
+@utility stagger-4 { animation-delay: 0.32s; }
+@utility stagger-5 { animation-delay: 0.40s; }
