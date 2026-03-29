@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircle, TrendingUp, Users, FileText, Lightbulb, Link2, AlertTriangle, Calendar, Plus, MessageSquare, ExternalLink, RefreshCw, ArrowUpRight } from "lucide-react";
+import { CheckCircle, TrendingUp, FileText, Lightbulb, Link2, AlertTriangle, Calendar, Plus, MessageSquare, ExternalLink, RefreshCw, ArrowUpRight } from "lucide-react";
 
 const B = {
   amber: "#faa840", amberDim: "rgba(250,168,64,0.15)", amberGlow: "rgba(250,168,64,0.25)",
@@ -38,11 +38,6 @@ function getMotivation() {
   return lines[new Date().getDate() % lines.length];
 }
 
-const SEED_CLIENTS = [
-  { name: "Legal Notice Service", code: "LNS", contacts: ["Andrew Morys", "Ben Desnoyers", "Brandon Bressner"], status: "Active", lastActivity: "2026-03-27" },
-  { name: "Community Journalism Project", code: "CJP", contacts: ["Patrick Schless", "Ray Herrara"], status: "Active", lastActivity: "2026-03-27" },
-  { name: "CK Marketing", code: "CK", contacts: ["Brad Moore", "Kevin Roselli"], status: "Active", lastActivity: "2026-03-26" },
-];
 
 const SEED_PROSPECTS = [
   { name: "Mid-Market Fintech Co.", stage: "Proposal Sent", value: "$5K/mo", nextStep: "Follow up Monday", lastActivity: "2026-03-27" },
@@ -128,70 +123,38 @@ function HeroHeader() {
   );
 }
 
-function TopBar() {
-  const [view, setView] = useState("clients");
-  const tab = (active, col) => ({
-    display: "flex", alignItems: "center", gap: 10, padding: "16px 22px", border: "none", background: "none",
-    cursor: "pointer", fontSize: 15, fontWeight: active ? 600 : 450, color: active ? col : B.textMute,
-    borderBottom: active ? `2px solid ${col}` : "2px solid transparent", transition: "all 0.2s ease",
-  });
+function ProspectBar() {
   return (
     <div style={{ ...glass, ...anim(1) }}>
-      <div style={{ display: "flex", padding: "0 24px", borderBottom: `1px solid ${B.border}` }}>
-        <button onClick={() => setView("clients")} style={tab(view === "clients", B.amber)}>
-          <Users size={18} /> Active Clients
-          <span style={{ fontSize: 12, fontWeight: 700, background: view === "clients" ? B.amber : "rgba(255,255,255,0.08)", color: view === "clients" ? "#000" : B.textMute, padding: "3px 10px", borderRadius: 10 }}>3</span>
-        </button>
-        <button onClick={() => setView("prospects")} style={tab(view === "prospects", B.green)}>
-          <TrendingUp size={18} /> Prospects
-          <span style={{ fontSize: 12, fontWeight: 700, background: view === "prospects" ? B.green : "rgba(255,255,255,0.08)", color: view === "prospects" ? "#000" : B.textMute, padding: "3px 10px", borderRadius: 10 }}>{SEED_PROSPECTS.length}</span>
-        </button>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "16px 24px", borderBottom: `1px solid ${B.border}` }}>
+        <TrendingUp size={18} color={B.green} />
+        <span style={{ fontSize: 15, fontWeight: 600, color: B.green }}>Prospects</span>
+        <span style={{ fontSize: 12, fontWeight: 700, background: B.green, color: "#000", padding: "3px 10px", borderRadius: 10 }}>{SEED_PROSPECTS.length}</span>
       </div>
       <div style={{ padding: 24 }}>
-        {view === "clients" ? (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-            {SEED_CLIENTS.map((c) => (
-              <div key={c.code} style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 14, border: `1px solid ${B.border}`, cursor: "pointer", transition: "all 0.25s ease", position: "relative", overflow: "hidden" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = B.amber + "40"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(250,168,64,0.06)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-                <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 2, background: `linear-gradient(90deg, ${B.amber}, transparent)` }} />
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                  <span style={{ fontSize: 17, fontWeight: 650, color: B.text }}>{c.name}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, background: B.greenDim, color: B.green, padding: "4px 10px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>{c.status}</span>
-                </div>
-                <div style={{ fontSize: 14, color: B.textSec, marginBottom: 10, lineHeight: 1.5 }}>{c.contacts.join(", ")}</div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 13, color: B.textMute }}>Last: {fmtDate(c.lastActivity)}</span>
-                  <ArrowUpRight size={16} color={B.textMute} />
-                </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {SEED_PROSPECTS.map((p, i) => (
+            <div key={i} style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 14, border: `1px solid ${B.border}`, cursor: "pointer", transition: "all 0.25s ease", position: "relative", overflow: "hidden" }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = B.green + "40"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}>
+              <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 2, background: `linear-gradient(90deg, ${B.green}, transparent)` }} />
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                <span style={{ fontSize: 17, fontWeight: 650, color: B.text }}>{p.name}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, background: B.amberDim, color: B.amber, padding: "4px 10px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>{p.stage}</span>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            {SEED_PROSPECTS.map((p, i) => (
-              <div key={i} style={{ padding: 20, background: "rgba(255,255,255,0.02)", borderRadius: 14, border: `1px solid ${B.border}`, cursor: "pointer", transition: "all 0.25s ease", position: "relative", overflow: "hidden" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = B.green + "40"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}>
-                <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: 2, background: `linear-gradient(90deg, ${B.green}, transparent)` }} />
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-                  <span style={{ fontSize: 17, fontWeight: 650, color: B.text }}>{p.name}</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, background: B.amberDim, color: B.amber, padding: "4px 10px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.08em" }}>{p.stage}</span>
-                </div>
-                <div style={{ display: "flex", gap: 12, marginBottom: 8 }}>
-                  <span style={{ fontSize: 20, fontWeight: 700, color: B.green }}>{p.value}</span>
-                  <span style={{ fontSize: 14, color: B.textMute, alignSelf: "center" }}>retainer</span>
-                </div>
-                <div style={{ fontSize: 14, color: B.textSec }}><b style={{ fontWeight: 600 }}>Next:</b> {p.nextStep}</div>
+              <div style={{ display: "flex", gap: 12, marginBottom: 8 }}>
+                <span style={{ fontSize: 20, fontWeight: 700, color: B.green }}>{p.value}</span>
+                <span style={{ fontSize: 14, color: B.textMute, alignSelf: "center" }}>retainer</span>
               </div>
-            ))}
-            <div style={{ padding: 20, borderRadius: 14, border: `1px dashed rgba(255,255,255,0.1)`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s ease" }}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = B.amber}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}>
-              <Plus size={20} color={B.textMute} /><span style={{ fontSize: 15, color: B.textMute, marginLeft: 8, fontWeight: 500 }}>Add Prospect</span>
+              <div style={{ fontSize: 14, color: B.textSec }}><b style={{ fontWeight: 600 }}>Next:</b> {p.nextStep}</div>
             </div>
+          ))}
+          <div style={{ padding: 20, borderRadius: 14, border: `1px dashed rgba(255,255,255,0.1)`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s ease" }}
+            onMouseEnter={(e) => e.currentTarget.style.borderColor = B.amber}
+            onMouseLeave={(e) => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}>
+            <Plus size={20} color={B.textMute} /><span style={{ fontSize: 15, color: B.textMute, marginLeft: 8, fontWeight: 500 }}>Add Prospect</span>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
@@ -391,7 +354,7 @@ export default function CommandCenter() {
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }`}</style>
       <HeroHeader />
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "28px 48px 48px" }}>
-        <div style={{ marginTop: 0 }}><TopBar /></div>
+        <div style={{ marginTop: 0 }}><ProspectBar /></div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, marginTop: 20 }}>
           <QuickActions />
           <SlackSync onSyncNow={() => setNewsSyncTrigger(t => t + 1)} />
