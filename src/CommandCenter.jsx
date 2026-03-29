@@ -265,97 +265,6 @@ function QuickActions() {
   );
 }
 
-const REL_STYLE = { high: { bg: B.amberDim, text: B.amber }, medium: { bg: "rgba(56,189,248,0.1)", text: "#38bdf8" }, low: { bg: "rgba(255,255,255,0.05)", text: B.textMute } };
-const SRC_COLORS = {
-  "MIT Tech Review": "#ef4444", "The Verge AI": "#a855f7", "VentureBeat AI": "#22c55e",
-  "TechCrunch AI": "#10b981", "Ars Technica AI": "#f97316",
-};
-
-function AINewsFeed({ syncTrigger }) {
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const doFetch = async (force = false) => {
-    try {
-      const opts = force ? { method: "POST" } : {};
-      const resp = await fetch("/api/ai-news", opts);
-      const data = await resp.json();
-      if (data.error) setError(data.error);
-      else { setArticles(data.articles || []); setError(null); }
-    } catch (e) { setError(e.message); }
-  };
-
-  useEffect(() => { doFetch().finally(() => setLoading(false)); }, []);
-  useEffect(() => { if (syncTrigger > 0) { setRefreshing(true); doFetch(true).finally(() => setRefreshing(false)); } }, [syncTrigger]);
-
-  const handleRefresh = async () => { setRefreshing(true); await doFetch(true); setRefreshing(false); };
-
-  return (
-    <div style={{ ...glass, padding: 24, ...anim(4) }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>Top AI News</h2>
-        <button onClick={handleRefresh} disabled={refreshing} style={{
-          display: "flex", alignItems: "center", gap: 7, padding: "8px 16px",
-          background: "rgba(250,168,64,0.1)", border: `1px solid rgba(250,168,64,0.18)`,
-          borderRadius: 8, cursor: "pointer", fontSize: 13, fontWeight: 700, color: B.amber,
-          transition: "all 0.2s ease", opacity: refreshing ? 0.6 : 1,
-        }}
-        onMouseEnter={e => e.currentTarget.style.background = B.amberDim}
-        onMouseLeave={e => e.currentTarget.style.background = "rgba(250,168,64,0.1)"}>
-          <RefreshCw size={14} style={refreshing ? { animation: "spin 1s linear infinite" } : {}} /> Refresh
-        </button>
-      </div>
-
-      {loading && articles.length === 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {[1,2,3,4,5].map(i => (
-            <div key={i} style={{ padding: "16px 18px", background: "rgba(255,255,255,0.02)", borderRadius: 12, border: `1px solid ${B.border}` }}>
-              <div style={{ height: 14, width: "60%", background: "rgba(255,255,255,0.05)", borderRadius: 4, marginBottom: 8, animation: "pulse 1.5s ease infinite" }} />
-              <div style={{ height: 12, width: "90%", background: "rgba(255,255,255,0.03)", borderRadius: 4, animation: "pulse 1.5s ease infinite" }} />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {error && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", background: B.redDim, borderRadius: 10, border: `1px solid ${B.red}20`, marginBottom: 10 }}>
-          <AlertTriangle size={16} color={B.red} />
-          <span style={{ fontSize: 13, color: B.red }}>{error}</span>
-        </div>
-      )}
-
-      {!loading && !error && articles.length === 0 && (
-        <div style={{ padding: 32, textAlign: "center", color: B.textMute, fontSize: 15 }}>No AI news available. Click Refresh to fetch.</div>
-      )}
-
-      {articles.map((a, i) => {
-        const rel = REL_STYLE[a.relevance] || REL_STYLE.medium;
-        const srcColor = SRC_COLORS[a.source] || "#94a3b8";
-        return (
-          <a key={`${a.url}-${i}`} href={a.url} target="_blank" rel="noopener noreferrer" style={{
-            display: "block", padding: "16px 18px", background: "rgba(255,255,255,0.02)", borderRadius: 12,
-            border: `1px solid ${B.border}`, marginBottom: 10, cursor: "pointer", transition: "all 0.2s ease", textDecoration: "none",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = B.amber + "30"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}>
-            <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 11, fontWeight: 700, background: srcColor + "18", color: srcColor, padding: "3px 10px", borderRadius: 5 }}>{a.source}</span>
-              <span style={{ fontSize: 11, fontWeight: 700, background: rel.bg, color: rel.text, padding: "3px 10px", borderRadius: 5, textTransform: "uppercase", letterSpacing: "0.06em" }}>{a.relevance}</span>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
-              <span style={{ fontSize: 15, fontWeight: 600, color: B.text, lineHeight: 1.5 }}>{a.title}</span>
-              <ExternalLink size={14} color={B.textMute} style={{ flexShrink: 0, marginTop: 3 }} />
-            </div>
-            {a.summary && <div style={{ fontSize: 13, color: B.textSec, lineHeight: 1.6, marginTop: 6 }}>{a.summary}</div>}
-          </a>
-        );
-      })}
-    </div>
-  );
-}
-
 function WeeklyCalendar() {
   return (
     <div style={{ ...glass, padding: 24, ...anim(5) }}>
@@ -387,11 +296,11 @@ function WeeklyCalendar() {
   );
 }
 
-function SlackSync({ onSyncNow }) {
+function SlackSync() {
   const pulls = [{ time: "7:00 AM", status: "completed" }, { time: "12:00 PM", status: "upcoming" }, { time: "6:00 PM", status: "upcoming" }];
   return (
     <div style={{ ...glass, padding: 24, display: "flex", flexDirection: "column", ...anim(3) }}>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0, marginBottom: 6 }}>Slack + News Sync</h2>
+      <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0, marginBottom: 6 }}>Slack Sync</h2>
       <div style={{ fontSize: 13, color: B.textMute, marginBottom: 20 }}>#cowork-daily-organizer</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
         {pulls.map((p, i) => (
@@ -402,7 +311,7 @@ function SlackSync({ onSyncNow }) {
           </div>
         ))}
       </div>
-      <button onClick={onSyncNow} style={{
+      <button style={{
         marginTop: 20, width: "100%", padding: "12px 16px", background: "rgba(250,168,64,0.1)",
         border: `1px solid rgba(250,168,64,0.18)`, borderRadius: 10, cursor: "pointer", fontSize: 14,
         color: B.amber, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s ease",
@@ -415,19 +324,17 @@ function SlackSync({ onSyncNow }) {
 }
 
 export default function CommandCenter() {
-  const [newsSyncTrigger, setNewsSyncTrigger] = useState(0);
   return (
     <div style={{ minHeight: "100vh", background: B.bg }}>
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }`}</style>
+      <style>{`@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }`}</style>
       <HeroHeader />
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "28px 48px 48px" }}>
         <div style={{ marginTop: 0 }}><ProspectBar /></div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, marginTop: 20 }}>
           <QuickActions />
-          <SlackSync onSyncNow={() => setNewsSyncTrigger(t => t + 1)} />
+          <SlackSync />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 20 }}>
-          <AINewsFeed syncTrigger={newsSyncTrigger} />
+        <div style={{ marginTop: 20 }}>
           <WeeklyCalendar />
         </div>
         <div style={{ textAlign: "center", padding: "36px 0 12px", fontSize: 12, color: B.textMute, letterSpacing: "0.08em", textTransform: "uppercase" }}>PerformanceLabs.AI Command Center</div>
