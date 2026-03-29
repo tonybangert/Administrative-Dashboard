@@ -1,6 +1,7 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fetchAINews } from './server/news.js'
+import { fetchZoomNotes } from './server/zoom.js'
 
 function newsPlugin() {
   return {
@@ -22,6 +23,36 @@ function newsPlugin() {
   };
 }
 
-export default defineConfig({
-  plugins: [react(), newsPlugin()],
+function zoomPlugin() {
+  return {
+    name: 'zoom-notes-api',
+    configureServer(server) {
+      server.middlewares.use('/api/zoom-notes', async (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        try {
+          const credentials = {
+            accountId: process.env.ZOOM_ACCOUNT_ID || '',
+            clientId: process.env.ZOOM_CLIENT_ID || '',
+            clientSecret: process.env.ZOOM_CLIENT_SECRET || '',
+          };
+          const forceRefresh = req.method === 'POST';
+          const result = await fetchZoomNotes(credentials, forceRefresh);
+          res.end(JSON.stringify(result));
+        } catch (err) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ notes: [], cached: false, fetchedAt: 0, error: err.message }));
+        }
+      });
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => {
+  // Load all .env vars into process.env (not just VITE_-prefixed)
+  const env = loadEnv(mode, process.cwd(), '');
+  Object.assign(process.env, env);
+
+  return {
+    plugins: [react(), newsPlugin(), zoomPlugin()],
+  };
 })

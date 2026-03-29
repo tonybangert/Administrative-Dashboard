@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircle, TrendingUp, FileText, Lightbulb, Link2, AlertTriangle, Calendar, Plus, MessageSquare, ExternalLink, RefreshCw, ArrowUpRight } from "lucide-react";
+import { CheckCircle, TrendingUp, FileText, Lightbulb, Link2, AlertTriangle, Calendar, Plus, MessageSquare, ExternalLink, RefreshCw, ArrowUpRight, Video } from "lucide-react";
 
 const B = {
   amber: "#faa840", amberDim: "rgba(250,168,64,0.15)", amberGlow: "rgba(250,168,64,0.25)",
@@ -323,6 +323,124 @@ function SlackSync() {
   );
 }
 
+function ZoomNotes() {
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchNotes = (force = false) => {
+    setLoading(true);
+    fetch("/api/zoom-notes", { method: force ? "POST" : "GET" })
+      .then(r => r.json())
+      .then(data => {
+        setNotes(data.notes || []);
+        setError(data.error || null);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => { fetchNotes(); }, []);
+
+  const purple = "#a78bfa";
+  const purpleDim = "rgba(167,139,250,0.12)";
+
+  return (
+    <div style={{ ...glass, padding: 24, ...anim(4) }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Video size={18} color={purple} />
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: B.text, margin: 0 }}>Zoom Meeting Notes</h2>
+        </div>
+        <button
+          onClick={() => fetchNotes(true)}
+          style={{
+            background: "transparent", border: `1px solid ${B.border}`, borderRadius: 8,
+            padding: "6px 8px", cursor: "pointer", display: "flex", alignItems: "center",
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = purple}
+          onMouseLeave={e => e.currentTarget.style.borderColor = B.border}
+        >
+          <RefreshCw size={14} color={B.textMute} />
+        </button>
+      </div>
+
+      {loading && notes.length === 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{
+              height: 72, borderRadius: 12, background: "rgba(255,255,255,0.03)",
+              animation: "pulse 1.5s ease-in-out infinite",
+            }} />
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10, padding: "14px 18px",
+          background: purpleDim, borderRadius: 12, border: `1px solid ${purple}20`,
+        }}>
+          <span style={{ fontSize: 14, color: purple }}>
+            {error === "Zoom not configured" ? "Connect Zoom to see meeting notes" : error}
+          </span>
+        </div>
+      )}
+
+      {!loading && !error && notes.length === 0 && (
+        <div style={{ textAlign: "center", padding: "28px 0", fontSize: 14, color: B.textMute }}>
+          No recent meetings in the last 7 days.
+        </div>
+      )}
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {notes.map((note) => (
+          <div key={note.meetingId + note.date} style={{
+            padding: "16px 20px", background: "rgba(255,255,255,0.02)", borderRadius: 12,
+            border: `1px solid ${B.border}`, transition: "all 0.25s ease",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = purple + "40"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = B.border; e.currentTarget.style.transform = "none"; }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: purple, flexShrink: 0 }} />
+                  <span style={{ fontSize: 15, fontWeight: 650, color: B.text }}>{note.topic}</span>
+                </div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8, paddingLeft: 14 }}>
+                  <span style={{ fontSize: 12, color: B.textMute }}>{note.date}</span>
+                  {note.duration > 0 && (
+                    <>
+                      <span style={{ fontSize: 12, color: B.textMute }}>·</span>
+                      <span style={{ fontSize: 12, color: B.textMute }}>{note.duration} min</span>
+                    </>
+                  )}
+                </div>
+                {note.context && (
+                  <p style={{ fontSize: 13, color: B.textSec, lineHeight: 1.6, margin: 0, paddingLeft: 14 }}>
+                    {note.context}
+                  </p>
+                )}
+              </div>
+              <a href={note.link} target="_blank" rel="noopener noreferrer" style={{
+                display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: purple,
+                textDecoration: "none", padding: "5px 10px", background: purpleDim,
+                borderRadius: 6, border: `1px solid ${purple}20`, whiteSpace: "nowrap",
+                transition: "all 0.2s ease", flexShrink: 0, marginTop: 2,
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = purple + "25"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = purpleDim; }}>
+                View Notes <ExternalLink size={11} />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CommandCenter() {
   return (
     <div style={{ minHeight: "100vh", background: B.bg }}>
@@ -333,6 +451,9 @@ export default function CommandCenter() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 20, marginTop: 20 }}>
           <QuickActions />
           <SlackSync />
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <ZoomNotes />
         </div>
         <div style={{ marginTop: 20 }}>
           <WeeklyCalendar />
