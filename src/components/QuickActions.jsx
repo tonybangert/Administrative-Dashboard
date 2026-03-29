@@ -148,11 +148,11 @@ export default function QuickActions() {
                    style={{ color: activeConfig.hex }}>
                 {/* Completion toggle */}
                 <button onClick={() => handleToggleComplete(item)}
-                        className={`w-4 h-4 rounded-full mt-[3px] shrink-0 cursor-pointer border-2 p-0 flex items-center justify-center
+                        className={`w-6 h-6 sm:w-5 sm:h-5 rounded-full mt-[1px] shrink-0 cursor-pointer border-2 p-0 flex items-center justify-center
                                     transition-all duration-200 bg-transparent
                                     ${item.completed ? "opacity-60" : "opacity-80 hover:opacity-100"}`}
                         style={{ borderColor: activeConfig.hex, background: item.completed ? activeConfig.hex : "transparent" }}>
-                  {item.completed && <Check size={10} className="text-black" />}
+                  {item.completed && <Check size={12} className="text-black" />}
                 </button>
                 <div className={`flex-1 min-w-0 transition-opacity duration-200 ${item.completed ? "opacity-40" : ""}`}>
                   <div className={`text-sm text-text-primary leading-relaxed ${item.completed ? "line-through" : ""}`}>{item.text}</div>
@@ -176,8 +176,8 @@ export default function QuickActions() {
                 </div>
                 {supabase && (
                   <button onClick={() => handleDelete(item.id)}
-                          className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-brand-red transition-all duration-200
-                                     cursor-pointer bg-transparent border-none mt-0.5">
+                          className="sm:opacity-0 sm:group-hover:opacity-100 text-text-muted hover:text-brand-red transition-all duration-200
+                                     cursor-pointer bg-transparent border-none mt-0.5 p-1">
                     <Trash2 size={13} />
                   </button>
                 )}

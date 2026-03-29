@@ -7,7 +7,7 @@ export default function SlackSync() {
   const isLive = messages.length > 0 && !apiError?.includes("not configured");
 
   return (
-    <div className="glass p-6 flex flex-col animate-fade-in-up stagger-3">
+    <div className="glass p-4 sm:p-6 flex flex-col animate-fade-in-up stagger-3">
       <h2 className="text-lg font-bold text-text-primary mb-1.5">Slack Sync</h2>
       <div className="text-[13px] text-text-muted mb-5">
         #{channelName || "cowork-daily-organizer"}

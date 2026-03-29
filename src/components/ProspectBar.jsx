@@ -83,7 +83,7 @@ export default function ProspectBar({ externalShowModal, onModalClosed }) {
                       <span className="text-[11px] font-bold bg-brand-amber-dim text-brand-amber px-2.5 py-1 rounded-md uppercase tracking-wide">{p.stage}</span>
                       {supabase && (
                         <button onClick={(e) => { e.stopPropagation(); handleDelete(p.id); }}
-                                className="opacity-0 group-hover:opacity-100 text-text-muted hover:text-brand-red transition-all duration-200 cursor-pointer bg-transparent border-none">
+                                className="sm:opacity-0 sm:group-hover:opacity-100 text-text-muted hover:text-brand-red transition-all duration-200 cursor-pointer bg-transparent border-none p-1">
                           <Trash2 size={14} />
                         </button>
                       )}

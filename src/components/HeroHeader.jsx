@@ -61,9 +61,9 @@ export default function HeroHeader({ onSignOut }) {
           <p className="text-lg text-text-secondary mt-2.5 font-[450]">{context}</p>
           <p className="text-[15px] text-text-muted mt-4 italic border-l-2 border-brand-amber pl-3.5 leading-relaxed">"{motivation}"</p>
         </div>
-        <div className="text-right flex flex-col items-end gap-3">
+        <div className="sm:text-right flex flex-col items-start sm:items-end gap-3">
           <div className="text-sm text-text-muted">{dateStr}</div>
-          <div className="text-4xl font-bold text-text-primary tracking-tight tabular-nums">{timeStr}</div>
+          <div className="text-3xl sm:text-4xl font-bold text-text-primary tracking-tight tabular-nums">{timeStr}</div>
           <div className="flex items-center gap-2 bg-brand-green-dim px-4 py-1.5 rounded-3xl mt-1.5">
             <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse-glow" />
             <span className="text-[13px] text-brand-green font-semibold">Systems Online</span>

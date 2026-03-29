@@ -41,7 +41,7 @@ export default function AddNoteModal({ onClose, onAdd, defaultCategory }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
          onClick={onClose}>
-      <div className="glass p-8 w-full max-w-lg animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+      <div className="glass p-5 sm:p-8 w-full max-w-lg animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-text-primary">Add Note</h2>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary transition-colors cursor-pointer bg-transparent border-none">
@@ -68,7 +68,7 @@ export default function AddNoteModal({ onClose, onAdd, defaultCategory }) {
                       placeholder="What needs to be done?" />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm text-text-secondary mb-1.5 font-medium">Tag (optional)</label>
               <input value={form.tag} onChange={set("tag")}

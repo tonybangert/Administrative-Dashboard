@@ -31,7 +31,7 @@ export default function ZoomNotes() {
   };
 
   return (
-    <div className="glass p-6 animate-fade-in-up stagger-4">
+    <div className="glass p-4 sm:p-6 animate-fade-in-up stagger-4">
       <div className="flex justify-between items-center mb-4.5">
         <div className="flex items-center gap-2.5">
           <Video size={18} className="text-brand-purple" />
@@ -76,7 +76,7 @@ export default function ZoomNotes() {
                className="px-5 py-4 bg-bg-subtle rounded-xl border border-border-default
                           transition-all duration-250 ease-out
                           hover:border-brand-purple/25 hover:-translate-y-px">
-            <div className="flex justify-between items-start">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-brand-purple shrink-0" />
@@ -98,7 +98,7 @@ export default function ZoomNotes() {
               <a href={note.link} target="_blank" rel="noopener noreferrer"
                  className="flex items-center gap-1.5 text-xs text-brand-purple no-underline px-2.5 py-1.5
                             bg-brand-purple-dim rounded-md border border-brand-purple/12 whitespace-nowrap
-                            shrink-0 mt-0.5 transition-all duration-200 hover:bg-brand-purple/15">
+                            shrink-0 ml-3.5 sm:ml-0 sm:mt-0.5 self-start transition-all duration-200 hover:bg-brand-purple/15">
                 View Notes <ExternalLink size={11} />
               </a>
             </div>

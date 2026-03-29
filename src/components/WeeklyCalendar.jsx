@@ -79,7 +79,7 @@ export default function WeeklyCalendar() {
     : `${fmt(mon)} - ${fmt(fri)}`;
 
   return (
-    <div className="glass p-6 animate-fade-in-up stagger-5">
+    <div className="glass p-4 sm:p-6 animate-fade-in-up stagger-5">
       <div className="flex justify-between items-center mb-4.5">
         <h2 className="text-lg font-bold text-text-primary">This Week</h2>
         <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ export default function WeeklyCalendar() {
 
       {/* Loading */}
       {isLoading && (
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
           {[1, 2, 3, 4, 5].map(i => <div key={i} className="h-[140px] rounded-[10px] bg-white/3 animate-pulse-skeleton" />)}
         </div>
       )}

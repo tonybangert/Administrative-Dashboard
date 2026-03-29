@@ -36,7 +36,7 @@ export default function Login({ onSignIn }) {
       <div className="absolute top-0 left-0 right-0 h-[3px] animate-gradient-shift"
            style={{ background: "linear-gradient(90deg, transparent, #faa840, #ef4537, #faa840, transparent)", backgroundSize: "200% 100%" }} />
 
-      <div className="glass p-10 w-full max-w-md relative animate-fade-in-up">
+      <div className="glass p-6 sm:p-10 w-full max-w-md relative animate-fade-in-up">
         {/* Logo + brand */}
         <div className="flex flex-col items-center mb-8">
           <img src={LOGO} alt="" className="w-14 h-14 rounded-xl mb-4" onError={(e) => e.target.style.display = "none"} />
