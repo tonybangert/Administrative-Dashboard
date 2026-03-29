@@ -1,4 +1,4 @@
-# Command Center | PerformanceLabs.AI
+# Administrative-Dashboard | PerformanceLabs.AI
 
 A personalized operational dashboard built for PerformanceLabs.AI. Dark mode, real-time Slack sync, and everything you need to run the business from one screen.
 
