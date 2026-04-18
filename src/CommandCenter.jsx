@@ -3,11 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Keyboard } from "lucide-react";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import HeroHeader from "./components/HeroHeader.jsx";
-import ProspectBar from "./components/ProspectBar.jsx";
+import AloraSales from "./components/aplora/AloraSales.jsx";
 import QuickActions from "./components/QuickActions.jsx";
 import SlackSync from "./components/SlackSync.jsx";
 import ZoomNotes from "./components/ZoomNotes.jsx";
-import WeeklyCalendar from "./components/WeeklyCalendar.jsx";
+
 import { useToast } from "./components/Toast.jsx";
 
 const SHORTCUTS = [
@@ -70,8 +70,8 @@ export default function CommandCenter({ onSignOut }) {
     <div className="min-h-screen bg-bg-primary">
       <HeroHeader onSignOut={onSignOut} />
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-7 pb-12">
-        <ErrorBoundary section="Prospects">
-          <ProspectBar externalShowModal={showProspectModal} onModalClosed={() => setShowProspectModal(false)} />
+        <ErrorBoundary section="Sales Pipeline">
+          <AloraSales externalShowModal={showProspectModal} onModalClosed={() => setShowProspectModal(false)} />
         </ErrorBoundary>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mt-5">
@@ -86,12 +86,6 @@ export default function CommandCenter({ onSignOut }) {
         <div className="mt-5">
           <ErrorBoundary section="Zoom Notes">
             <ZoomNotes />
-          </ErrorBoundary>
-        </div>
-
-        <div className="mt-5">
-          <ErrorBoundary section="Calendar">
-            <WeeklyCalendar />
           </ErrorBoundary>
         </div>
 

@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/aplora/:path*", "destination": "/api/aplora-proxy?path=:path*" }
+  ]
+}

@@ -14,6 +14,8 @@
   --color-brand-indigo: #818cf8;
   --color-brand-pink: #f472b6;
   --color-brand-sky: #38bdf8;
+  --color-brand-blue: #0066FF;
+  --color-brand-blue-dim: rgba(0, 102, 255, 0.12);
   --color-brand-navy: #102d50;
 
   --color-bg-primary: #080f1e;
@@ -93,3 +95,12 @@
 @utility stagger-3 { animation-delay: 0.24s; }
 @utility stagger-4 { animation-delay: 0.32s; }
 @utility stagger-5 { animation-delay: 0.40s; }
+
+/* ── Kanban Snap-Scroll Utilities ── */
+@utility snap-x { scroll-snap-type: x mandatory; }
+@utility snap-center { scroll-snap-align: center; }
+
+@media (max-width: 767px) {
+  .mobile-hide-scrollbar::-webkit-scrollbar { display: none; }
+  .mobile-hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
