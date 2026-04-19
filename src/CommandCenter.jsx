@@ -5,7 +5,6 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import HeroHeader from "./components/HeroHeader.jsx";
 import AloraSales from "./components/aplora/AloraSales.jsx";
 import QuickActions from "./components/QuickActions.jsx";
-import SlackSync from "./components/SlackSync.jsx";
 import ZoomNotes from "./components/ZoomNotes.jsx";
 
 import { useToast } from "./components/Toast.jsx";
@@ -70,16 +69,13 @@ export default function CommandCenter({ onSignOut }) {
     <div className="min-h-screen bg-bg-primary">
       <HeroHeader onSignOut={onSignOut} />
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-7 pb-12">
-        <ErrorBoundary section="Sales Pipeline">
-          <AloraSales externalShowModal={showProspectModal} onModalClosed={() => setShowProspectModal(false)} />
+        <ErrorBoundary section="Quick Actions">
+          <QuickActions />
         </ErrorBoundary>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 mt-5">
-          <ErrorBoundary section="Quick Actions">
-            <QuickActions />
-          </ErrorBoundary>
-          <ErrorBoundary section="Slack">
-            <SlackSync />
+        <div className="mt-5">
+          <ErrorBoundary section="Sales Pipeline">
+            <AloraSales externalShowModal={showProspectModal} onModalClosed={() => setShowProspectModal(false)} />
           </ErrorBoundary>
         </div>
 

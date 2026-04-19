@@ -6,6 +6,7 @@ import { fetchZoomNotes } from './server/zoom.js'
 
 import { fetchSlackMessages } from './server/slack.js'
 import { proxyAploraRequest } from './server/aplora.js'
+import { fetchObsidianTodos } from './server/obsidian.js'
 
 function newsPlugin() {
   return {
@@ -60,9 +61,9 @@ function slackPlugin() {
         res.setHeader('Content-Type', 'application/json');
         try {
           const botToken = process.env.SLACK_BOT_TOKEN || '';
-          const channelId = process.env.SLACK_CHANNEL_ID || '';
+          const dmChannelId = process.env.SLACK_DM_CHANNEL || '';
           const forceRefresh = req.method === 'POST';
-          const result = await fetchSlackMessages(botToken, channelId, forceRefresh);
+          const result = await fetchSlackMessages(botToken, dmChannelId, forceRefresh);
           res.end(JSON.stringify(result));
         } catch (err) {
           res.statusCode = 500;
@@ -87,12 +88,31 @@ function aploraPlugin() {
   };
 }
 
+function obsidianPlugin() {
+  return {
+    name: 'obsidian-vault-api',
+    configureServer(server) {
+      server.middlewares.use('/api/obsidian-vault', async (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        try {
+          const forceRefresh = req.method === 'POST';
+          const result = await fetchObsidianTodos({ forceRefresh });
+          res.end(JSON.stringify(result));
+        } catch (err) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ todos: [], lastFetched: null, cached: false, error: err.message }));
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   // Load all .env vars into process.env (not just VITE_-prefixed)
   const env = loadEnv(mode, process.cwd(), '');
   Object.assign(process.env, env);
 
   return {
-    plugins: [react(), tailwindcss(), newsPlugin(), zoomPlugin(), slackPlugin(), aploraPlugin()],
+    plugins: [react(), tailwindcss(), newsPlugin(), zoomPlugin(), slackPlugin(), aploraPlugin(), obsidianPlugin()],
   };
 })
