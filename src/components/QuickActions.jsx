@@ -311,12 +311,17 @@ export default function QuickActions() {
                     <div className="text-sm text-text-primary leading-relaxed">{todo.text}</div>
                     <div className="flex gap-2 mt-1.5 flex-wrap">
                       <span className="text-[11px] text-text-muted">{todo.source.file}</span>
+                      {/* Qualifying tag — the one that put this item here */}
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-[5px] bg-brand-amber text-black">
+                        #status/follow-up
+                      </span>
+                      {/* Any other tags on the same line, for context */}
                       {todo.tags
                         .filter((t) => t !== "status/follow-up")
                         .map((t) => (
                           <span
                             key={t}
-                            className="text-[11px] font-semibold px-2 py-0.5 rounded-[5px] bg-brand-amber/10 text-brand-amber"
+                            className="text-[11px] font-medium px-2 py-0.5 rounded-[5px] bg-brand-amber/10 text-brand-amber"
                           >
                             #{t}
                           </span>
