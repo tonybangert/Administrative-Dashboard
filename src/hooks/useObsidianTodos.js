@@ -10,8 +10,8 @@ export function useObsidianTodos() {
   const query = useQuery({
     queryKey: ["obsidian-todos"],
     queryFn: fetchTodos,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: true,
   });
 
   const todos = query.data?.todos ?? [];

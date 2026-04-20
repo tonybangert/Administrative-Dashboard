@@ -12,7 +12,7 @@
 
 const TARGET_TAG = "status/follow-up";
 const TAG_RE = /#([a-zA-Z0-9][a-zA-Z0-9_\-/]*)/g;
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_TTL_MS = 60 * 1000;
 
 let cache = { data: null, fetchedAt: 0 };
 
